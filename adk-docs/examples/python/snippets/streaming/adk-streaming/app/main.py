@@ -50,7 +50,7 @@ load_dotenv()
 APP_NAME = "ADK Streaming example"
 
 
-async def start_agent_session(user_id, is_audio=False):
+async def start_agent_session(user_id):
     """Starts an agent session"""
 
     # Create a Runner
@@ -66,9 +66,8 @@ async def start_agent_session(user_id, is_audio=False):
     )
 
     # Set response modality
-    modality = "AUDIO" if is_audio else "TEXT"
     run_config = RunConfig(
-        response_modalities=[modality],
+        response_modalities=["TEXT"],
         session_resumption=types.SessionResumptionConfig()
     )
 
@@ -103,19 +102,6 @@ async def agent_to_client_sse(live_events):
         )
         if not part:
             continue
-
-        # If it's audio, send Base64 encoded audio data
-        is_audio = part.inline_data and part.inline_data.mime_type.startswith("audio/pcm")
-        if is_audio:
-            audio_data = part.inline_data and part.inline_data.data
-            if audio_data:
-                message = {
-                    "mime_type": "audio/pcm",
-                    "data": base64.b64encode(audio_data).decode("ascii")
-                }
-                yield f"data: {json.dumps(message)}\n\n"
-                print(f"[AGENT TO CLIENT]: audio/pcm: {len(audio_data)} bytes.")
-                continue
 
         # If it's text and a parial text, send it
         if part.text and event.partial:
@@ -155,17 +141,17 @@ async def root():
 
 
 @app.get("/events/{user_id}")
-async def sse_endpoint(user_id: int, is_audio: str = "false"):
+async def sse_endpoint(user_id: int):
     """SSE endpoint for agent to client communication"""
 
     # Start agent session
     user_id_str = str(user_id)
-    live_events, live_request_queue = await start_agent_session(user_id_str, is_audio == "true")
+    live_events, live_request_queue = await start_agent_session(user_id_str)
 
     # Store the request queue for this user
     active_sessions[user_id_str] = live_request_queue
 
-    print(f"Client #{user_id} connected via SSE, audio mode: {is_audio}")
+    print(f"Client #{user_id} connected via SSE")
 
     def cleanup():
         live_request_queue.close()
@@ -215,10 +201,6 @@ async def send_message_endpoint(user_id: int, request: Request):
         content = Content(role="user", parts=[Part.from_text(text=data)])
         live_request_queue.send_content(content=content)
         print(f"[CLIENT TO AGENT]: {data}")
-    elif mime_type == "audio/pcm":
-        decoded_data = base64.b64decode(data)
-        live_request_queue.send_realtime(Blob(data=decoded_data, mime_type=mime_type))
-        print(f"[CLIENT TO AGENT]: audio/pcm: {len(decoded_data)} bytes")
     else:
         return {"error": f"Mime type not supported: {mime_type}"}
 

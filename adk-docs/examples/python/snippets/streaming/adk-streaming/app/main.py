@@ -27,8 +27,7 @@ from google.genai.types import (
 )
 
 from google.adk.runners import InMemoryRunner
-from google.adk.agents import LiveRequestQueue
-from google.adk.agents.run_config import RunConfig
+from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.genai import types
 
 from fastapi import FastAPI, Request
@@ -49,38 +48,27 @@ load_dotenv()
 
 APP_NAME = "ADK Streaming example"
 
+# Create global Runner instance
+runner = InMemoryRunner(
+    app_name=APP_NAME,
+    agent=root_agent,
+)
 
-async def start_agent_session(user_id):
-    """Starts an agent session"""
 
-    # Create a Runner
-    runner = InMemoryRunner(
-        app_name=APP_NAME,
-        agent=root_agent,
-    )
+async def get_or_create_session(user_id: str) -> str:
+    """Gets or creates a session for the given user and returns session_id"""
+    if user_id in active_sessions:
+        return active_sessions[user_id]
 
-    # Create a Session
+    # Create a new Session
     session = await runner.session_service.create_session(
         app_name=APP_NAME,
-        user_id=user_id,  # Replace with actual user ID
+        user_id=user_id,
     )
 
-    # Set response modality
-    run_config = RunConfig(
-        response_modalities=["TEXT"],
-        session_resumption=types.SessionResumptionConfig()
-    )
-
-    # Create a LiveRequestQueue for this session
-    live_request_queue = LiveRequestQueue()
-
-    # Start agent session
-    live_events = runner.run_live(
-        session=session,
-        live_request_queue=live_request_queue,
-        run_config=run_config,
-    )
-    return live_events, live_request_queue
+    # Store the session ID
+    active_sessions[user_id] = session.id
+    return session.id
 
 
 async def agent_to_client_sse(live_events):
@@ -130,7 +118,7 @@ app.add_middleware(
 STATIC_DIR = Path("static")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Store active sessions
+# Store active sessions (user_id -> session_id)
 active_sessions = {}
 
 
@@ -140,33 +128,55 @@ async def root():
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 
-@app.get("/events/{user_id}")
-async def sse_endpoint(user_id: int):
-    """SSE endpoint for agent to client communication"""
 
-    # Start agent session
+
+@app.post("/send/{user_id}")
+async def send_message_endpoint(user_id: int, request: Request):
+    """HTTP endpoint for client to agent communication with streaming response"""
+
     user_id_str = str(user_id)
-    live_events, live_request_queue = await start_agent_session(user_id_str)
 
-    # Store the request queue for this user
-    active_sessions[user_id_str] = live_request_queue
+    # Get or create session for this user
+    session_id = await get_or_create_session(user_id_str)
 
-    print(f"Client #{user_id} connected via SSE")
+    # Parse the message
+    message = await request.json()
+    mime_type = message["mime_type"]
+    data = message["data"]
 
-    def cleanup():
-        live_request_queue.close()
-        if user_id_str in active_sessions:
-            del active_sessions[user_id_str]
-        print(f"Client #{user_id} disconnected from SSE")
+    # Validate mime type
+    if mime_type != "text/plain":
+        return {"error": f"Mime type not supported: {mime_type}"}
 
+    # Create user content
+    user_content = Content(role="user", parts=[Part.from_text(text=data)])
+    print(f"[CLIENT TO AGENT]: {data}")
+
+    # Set response modality
+    run_config = RunConfig(
+        response_modalities=["TEXT"],
+        streaming_mode=StreamingMode.SSE,
+        session_resumption=types.SessionResumptionConfig()
+    )
+
+    # Run agent with run_async using session_id and stream the response
     async def event_generator():
         try:
-            async for data in agent_to_client_sse(live_events):
+            agent_events = runner.run_async(
+                user_id=user_id_str,
+                session_id=session_id,
+                new_message=user_content,
+                run_config=run_config,
+            )
+            async for data in agent_to_client_sse(agent_events):
                 yield data
         except Exception as e:
-            print(f"Error in SSE stream: {e}")
-        finally:
-            cleanup()
+            print(f"Error in agent stream: {e}")
+            error_message = {
+                "error": str(e),
+                "turn_complete": True
+            }
+            yield f"data: {json.dumps(error_message)}\n\n"
 
     return StreamingResponse(
         event_generator(),
@@ -178,30 +188,3 @@ async def sse_endpoint(user_id: int):
             "Access-Control-Allow-Headers": "Cache-Control"
         }
     )
-
-
-@app.post("/send/{user_id}")
-async def send_message_endpoint(user_id: int, request: Request):
-    """HTTP endpoint for client to agent communication"""
-
-    user_id_str = str(user_id)
-
-    # Get the live request queue for this user
-    live_request_queue = active_sessions.get(user_id_str)
-    if not live_request_queue:
-        return {"error": "Session not found"}
-
-    # Parse the message
-    message = await request.json()
-    mime_type = message["mime_type"]
-    data = message["data"]
-
-    # Send the message to the agent
-    if mime_type == "text/plain":
-        content = Content(role="user", parts=[Part.from_text(text=data)])
-        live_request_queue.send_content(content=content)
-        print(f"[CLIENT TO AGENT]: {data}")
-    else:
-        return {"error": f"Mime type not supported: {mime_type}"}
-
-    return {"status": "sent"}

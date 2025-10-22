@@ -2,119 +2,40 @@
  * app.js: JS code for the adk-streaming sample app.
  */
 
-/**
- * SSE (Server-Sent Events) handling
- */
-
-// Connect the server with SSE
+// Generate a unique session ID
 const sessionId = Math.random().toString().substring(10);
-const sse_url =
-  "http://" + window.location.host + "/events/" + sessionId;
 const send_url =
   "http://" + window.location.host + "/send/" + sessionId;
-let eventSource = null;
 
 // Get DOM elements
 const messageForm = document.getElementById("messageForm");
 const messageInput = document.getElementById("message");
 const messagesDiv = document.getElementById("messages");
+const sendButton = document.getElementById("sendButton");
 let currentMessageId = null;
 
-// SSE handlers
-function connectSSE() {
-  // Connect to SSE endpoint
-  eventSource = new EventSource(sse_url);
-
-  // Handle connection open
-  eventSource.onopen = function () {
-    // Connection opened messages
-    console.log("SSE connection opened.");
-    document.getElementById("messages").textContent = "Connection opened";
-
-    // Enable the Send button
-    document.getElementById("sendButton").disabled = false;
-    addSubmitHandler();
-  };
-
-  // Handle incoming messages
-  eventSource.onmessage = function (event) {
-    // Parse the incoming message
-    const message_from_server = JSON.parse(event.data);
-    console.log("[AGENT TO CLIENT] ", message_from_server);
-
-    // Check if the turn is complete
-    // if turn complete, add new message
-    if (
-      message_from_server.turn_complete &&
-      message_from_server.turn_complete == true
-    ) {
-      currentMessageId = null;
-      return;
-    }
-
-    // Check for interrupt message
-    if (
-      message_from_server.interrupted &&
-      message_from_server.interrupted === true
-    ) {
-      return;
-    }
-
-    // If it's a text, print it
-    if (message_from_server.mime_type == "text/plain") {
-      // add a new message for a new turn
-      if (currentMessageId == null) {
-        currentMessageId = Math.random().toString(36).substring(7);
-        const message = document.createElement("p");
-        message.id = currentMessageId;
-        // Append the message element to the messagesDiv
-        messagesDiv.appendChild(message);
-      }
-
-      // Add message text to the existing message element
-      const message = document.getElementById(currentMessageId);
-      message.textContent += message_from_server.data;
-
-      // Scroll down to the bottom of the messagesDiv
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-  };
-
-  // Handle connection close
-  eventSource.onerror = function (event) {
-    console.log("SSE connection error or closed.");
-    document.getElementById("sendButton").disabled = true;
-    document.getElementById("messages").textContent = "Connection closed";
-    eventSource.close();
-    setTimeout(function () {
-      console.log("Reconnecting...");
-      connectSSE();
-    }, 5000);
-  };
-}
-connectSSE();
+// Enable the send button on page load
+sendButton.disabled = false;
 
 // Add submit handler to the form
-function addSubmitHandler() {
-  messageForm.onsubmit = function (e) {
-    e.preventDefault();
-    const message = messageInput.value;
-    if (message) {
-      const p = document.createElement("p");
-      p.textContent = "> " + message;
-      messagesDiv.appendChild(p);
-      messageInput.value = "";
-      sendMessage({
-        mime_type: "text/plain",
-        data: message,
-      });
-      console.log("[CLIENT TO AGENT] " + message);
-    }
-    return false;
-  };
-}
+messageForm.onsubmit = function (e) {
+  e.preventDefault();
+  const message = messageInput.value;
+  if (message) {
+    const p = document.createElement("p");
+    p.textContent = "> " + message;
+    messagesDiv.appendChild(p);
+    messageInput.value = "";
+    sendMessage({
+      mime_type: "text/plain",
+      data: message,
+    });
+    console.log("[CLIENT TO AGENT] " + message);
+  }
+  return false;
+};
 
-// Send a message to the server via HTTP POST
+// Send a message to the server and receive streaming response
 async function sendMessage(message) {
   try {
     const response = await fetch(send_url, {
@@ -124,11 +45,78 @@ async function sendMessage(message) {
       },
       body: JSON.stringify(message)
     });
-    
+
     if (!response.ok) {
       console.error('Failed to send message:', response.statusText);
+      return;
+    }
+
+    // Read the streaming response as SSE
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+        break;
+      }
+
+      // Decode the chunk and add to buffer
+      buffer += decoder.decode(value, { stream: true });
+
+      // Process complete SSE messages in the buffer
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep incomplete line in buffer
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.substring(6); // Remove 'data: ' prefix
+          try {
+            const message_from_server = JSON.parse(data);
+            console.log("[AGENT TO CLIENT] ", message_from_server);
+            handleServerMessage(message_from_server);
+          } catch (e) {
+            console.error('Error parsing SSE data:', e);
+          }
+        }
+      }
     }
   } catch (error) {
     console.error('Error sending message:', error);
+  }
+}
+
+// Handle messages from the server
+function handleServerMessage(message_from_server) {
+  // Check if the turn is complete
+  if (message_from_server.turn_complete && message_from_server.turn_complete == true) {
+    currentMessageId = null;
+    return;
+  }
+
+  // Check for interrupt message
+  if (message_from_server.interrupted && message_from_server.interrupted === true) {
+    return;
+  }
+
+  // If it's a text, print it
+  if (message_from_server.mime_type == "text/plain") {
+    // Add a new message for a new turn
+    if (currentMessageId == null) {
+      currentMessageId = Math.random().toString(36).substring(7);
+      const message = document.createElement("p");
+      message.id = currentMessageId;
+      // Append the message element to the messagesDiv
+      messagesDiv.appendChild(message);
+    }
+
+    // Add message text to the existing message element
+    const message = document.getElementById(currentMessageId);
+    message.textContent += message_from_server.data;
+
+    // Scroll down to the bottom of the messagesDiv
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 }

@@ -114,7 +114,10 @@ function handleServerMessage(message_from_server) {
 
     // Add message text to the existing message element
     const message = document.getElementById(currentMessageId);
-    message.textContent += message_from_server.data;
+    // Replace newline characters with <br> tags for proper display
+    const currentText = message.innerHTML;
+    const newText = message_from_server.data.replace(/\n/g, '<br>');
+    message.innerHTML = currentText + newText;
 
     // Scroll down to the bottom of the messagesDiv
     messagesDiv.scrollTop = messagesDiv.scrollHeight;

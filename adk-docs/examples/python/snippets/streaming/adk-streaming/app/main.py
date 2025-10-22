@@ -15,6 +15,7 @@
 import os
 import json
 import base64
+from typing import AsyncGenerator
 import warnings
 
 from pathlib import Path
@@ -27,6 +28,7 @@ from google.genai.types import (
 )
 
 from google.adk.runners import InMemoryRunner
+from google.adk.events import Event
 from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.genai import types
 
@@ -71,7 +73,7 @@ async def get_or_create_session(user_id: str) -> str:
     return session.id
 
 
-async def agent_to_client_sse(live_events):
+async def agent_to_client_sse(live_events: AsyncGenerator[Event, None]):
     """Agent to client communication via SSE"""
     async for event in live_events:
         # If the turn complete or interrupted, send it

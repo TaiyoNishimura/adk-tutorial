@@ -76,6 +76,15 @@ async def get_or_create_session(user_id: str) -> str:
 async def agent_to_client_sse(events: AsyncGenerator[Event, None]):
     """Agent to client communication via SSE"""
     async for event in events:
+        # if event has error_message, print it
+        if event.error_message:
+            error_message = {
+                "error": event.error_message,
+                "turn_complete": True
+            }
+            print(f"[AGENT TO CLIENT]: error: {error_message}")
+            continue
+
         # Read the Content and its first Part
         part: Part = (
             event.content and event.content.parts and event.content.parts[0]

@@ -73,19 +73,9 @@ async def get_or_create_session(user_id: str) -> str:
     return session.id
 
 
-async def agent_to_client_sse(live_events: AsyncGenerator[Event, None]):
+async def agent_to_client_sse(events: AsyncGenerator[Event, None]):
     """Agent to client communication via SSE"""
-    async for event in live_events:
-        # If the turn complete or interrupted, send it
-        if event.turn_complete or event.interrupted:
-            message = {
-                "turn_complete": event.turn_complete,
-                "interrupted": event.interrupted,
-            }
-            yield f"data: {json.dumps(message)}\n\n"
-            print(f"[AGENT TO CLIENT]: {message}")
-            continue
-
+    async for event in events:
         # Read the Content and its first Part
         part: Part = (
             event.content and event.content.parts and event.content.parts[0]
@@ -101,6 +91,14 @@ async def agent_to_client_sse(live_events: AsyncGenerator[Event, None]):
             }
             yield f"data: {json.dumps(message)}\n\n"
             print(f"[AGENT TO CLIENT]: text/plain: {message}")
+
+    # After all events are processed, send turn_complete
+    final_message = {
+        "turn_complete": True,
+        "interrupted": False,
+    }
+    yield f"data: {json.dumps(final_message)}\n\n"
+    print(f"[AGENT TO CLIENT]: {final_message}")
 
 
 #

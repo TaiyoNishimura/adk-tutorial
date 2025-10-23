@@ -14,7 +14,6 @@
 
 import os
 import json
-import base64
 from typing import AsyncGenerator
 import warnings
 
@@ -24,7 +23,6 @@ from dotenv import load_dotenv
 from google.genai.types import (
     Part,
     Content,
-    Blob,
 )
 
 from google.adk.runners import InMemoryRunner

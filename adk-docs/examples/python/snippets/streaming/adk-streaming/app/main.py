@@ -163,7 +163,6 @@ async def send_message_endpoint(user_id: str, session_id: str, request: Request)
     run_config = RunConfig(
         response_modalities=["TEXT"],
         streaming_mode=StreamingMode.SSE,
-        session_resumption=types.SessionResumptionConfig()
     )
 
     # Run agent with run_async using session_id and stream the response

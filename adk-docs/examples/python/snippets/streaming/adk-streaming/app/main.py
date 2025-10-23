@@ -55,19 +55,25 @@ runner = InMemoryRunner(
 )
 
 
-async def get_or_create_session(user_id: str) -> str:
-    """Gets or creates a session for the given user and returns session_id"""
-    if user_id in active_sessions:
-        return active_sessions[user_id]
+async def get_or_create_session(user_id: str, session_id: str) -> str:
+    """Gets or creates a session for the given user and session_id"""
+    # Try to get existing session
+    session = await runner.session_service.get_session(
+        app_name=APP_NAME,
+        user_id=user_id,
+        session_id=session_id,
+    )
 
-    # Create a new Session
+    if session:
+        return session.id
+
+    # Create a new Session with the provided session_id
     session = await runner.session_service.create_session(
         app_name=APP_NAME,
         user_id=user_id,
+        session_id=session_id,
     )
 
-    # Store the session ID
-    active_sessions[user_id] = session.id
     return session.id
 
 
@@ -125,10 +131,6 @@ app.add_middleware(
 STATIC_DIR = Path("static")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Store active sessions (user_id -> session_id)
-active_sessions = {}
-
-
 @app.get("/")
 async def root():
     """Serves the index.html"""
@@ -137,14 +139,12 @@ async def root():
 
 
 
-@app.post("/send/{user_id}")
-async def send_message_endpoint(user_id: int, request: Request):
+@app.post("/send/{user_id}/{session_id}")
+async def send_message_endpoint(user_id: str, session_id: str, request: Request):
     """HTTP endpoint for client to agent communication with streaming response"""
 
-    user_id_str = str(user_id)
-
-    # Get or create session for this user
-    session_id = await get_or_create_session(user_id_str)
+    # Get or create session for this user and session_id
+    session_id = await get_or_create_session(user_id, session_id)
 
     # Parse the message
     message = await request.json()
@@ -170,7 +170,7 @@ async def send_message_endpoint(user_id: int, request: Request):
     async def event_generator():
         try:
             agent_events = runner.run_async(
-                user_id=user_id_str,
+                user_id=user_id,
                 session_id=session_id,
                 new_message=user_content,
                 run_config=run_config,

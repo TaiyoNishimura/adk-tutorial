@@ -2,10 +2,11 @@
  * app.js: JS code for the adk-streaming sample app.
  */
 
-// Generate a unique session ID
-const sessionId = Math.random().toString().substring(10);
+// Generate a unique user ID and session ID
+const userId = "user1";
+const sessionId = crypto.randomUUID();
 const send_url =
-  "http://" + window.location.host + "/send/" + sessionId;
+  "http://" + window.location.host + "/send/" + userId + "/" + sessionId;
 
 // Get DOM elements
 const messageForm = document.getElementById("messageForm");

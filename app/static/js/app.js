@@ -2,23 +2,20 @@
  * app.js: JS code for the adk-streaming sample app.
  */
 
-// Generate a unique user ID and session ID
+
 const userId = "user1";
 const sessionId = crypto.randomUUID();
 const send_url =
   "http://" + window.location.host + "/send/" + userId + "/" + sessionId;
 
-// Get DOM elements
+
 const messageForm = document.getElementById("messageForm");
 const messageInput = document.getElementById("message");
 const messagesDiv = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton");
 let currentMessageId = null;
 
-// Enable the send button on page load
-sendButton.disabled = false;
 
-// Add submit handler to the form
 messageForm.onsubmit = function (e) {
   e.preventDefault();
   const message = messageInput.value;
@@ -36,7 +33,7 @@ messageForm.onsubmit = function (e) {
   return false;
 };
 
-// Send a message to the server and receive streaming response
+
 async function sendMessage(message) {
   try {
     const response = await fetch(send_url, {
@@ -52,7 +49,6 @@ async function sendMessage(message) {
       return;
     }
 
-    // Read the streaming response as SSE
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
@@ -64,10 +60,8 @@ async function sendMessage(message) {
         break;
       }
 
-      // Decode the chunk and add to buffer
       buffer += decoder.decode(value, { stream: true });
 
-      // Process complete SSE messages in the buffer
       const lines = buffer.split('\n');
       buffer = lines.pop(); // Keep incomplete line in buffer
 
@@ -89,20 +83,17 @@ async function sendMessage(message) {
   }
 }
 
-// Handle messages from the server
+
 function handleServerMessage(message_from_server) {
-  // Check if the turn is complete
   if (message_from_server.turn_complete && message_from_server.turn_complete == true) {
     currentMessageId = null;
     return;
   }
 
-  // Check for interrupt message
   if (message_from_server.interrupted && message_from_server.interrupted === true) {
     return;
   }
 
-  // Handle text messages
   if (message_from_server.mime_type == "text/plain") {
     if (currentMessageId == null) {
       currentMessageId = createNewMessageElement();

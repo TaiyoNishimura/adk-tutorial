@@ -102,25 +102,37 @@ function handleServerMessage(message_from_server) {
     return;
   }
 
-  // If it's a text, print it
+  // Handle text messages
   if (message_from_server.mime_type == "text/plain") {
-    // Add a new message for a new turn
     if (currentMessageId == null) {
-      currentMessageId = Math.random().toString(36).substring(7);
-      const message = document.createElement("p");
-      message.id = currentMessageId;
-      // Append the message element to the messagesDiv
-      messagesDiv.appendChild(message);
+      currentMessageId = createNewMessageElement();
     }
 
-    // Add message text to the existing message element
-    const message = document.getElementById(currentMessageId);
-    // Replace newline characters with <br> tags for proper display
-    const currentText = message.innerHTML;
-    const newText = message_from_server.data.replace(/\n/g, '<br>');
-    message.innerHTML = currentText + newText;
+    appendTextToMessage(currentMessageId, message_from_server.data);
 
-    // Scroll down to the bottom of the messagesDiv
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    scrollToBottom();
   }
+}
+
+// Helper functions
+function generateMessageId() {
+  return Math.random().toString(36).substring(7);
+}
+
+function createNewMessageElement() {
+  const messageId = generateMessageId();
+  const messageElement = document.createElement("p");
+  messageElement.id = messageId;
+  messagesDiv.appendChild(messageElement);
+  return messageId;
+}
+
+function appendTextToMessage(messageId, text) {
+  const messageElement = document.getElementById(messageId);
+  const htmlFormattedText = text.replace(/\n/g, '<br>');
+  messageElement.innerHTML += htmlFormattedText;
+}
+
+function scrollToBottom() {
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }

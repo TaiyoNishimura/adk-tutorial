@@ -25,7 +25,8 @@ from google.genai.types import (
     Content,
 )
 
-from google.adk.runners import InMemoryRunner
+from google.adk.runners import Runner
+from google.adk.sessions.database_session_service import DatabaseSessionService
 from google.adk.events import Event
 from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.genai import types
@@ -48,10 +49,18 @@ load_dotenv()
 
 APP_NAME = "ADK Streaming example"
 
+# Create database session service
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is not set")
+
+session_service = DatabaseSessionService(db_url=database_url)
+
 # Create global Runner instance
-runner = InMemoryRunner(
+runner = Runner(
     app_name=APP_NAME,
     agent=root_agent,
+    session_service=session_service,
 )
 
 

@@ -15,7 +15,6 @@ from google.adk.runners import Runner
 from google.adk.sessions.database_session_service import DatabaseSessionService
 from google.adk.events import Event
 from google.adk.agents.run_config import RunConfig, StreamingMode
-from google.genai import types
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles

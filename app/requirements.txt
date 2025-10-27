@@ -2,3 +2,4 @@ google-adk==1.10.0
 fastapi[standard]
 psycopg2-binary
 python-dotenv
+google-adk[eval]

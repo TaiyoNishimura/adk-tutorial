@@ -1,0 +1,7 @@
+{
+  "criteria": {
+    "response_match_score": 0.7,
+    "tool_trajectory_avg_score": 1.0
+  },
+  "print_detailed_results": true
+}

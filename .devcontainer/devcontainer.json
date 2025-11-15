@@ -23,7 +23,10 @@
 		"vscode": {
 			"extensions": [
 				"charliermarsh.ruff"
-			]
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh"
+			}
 		}
 	},
 

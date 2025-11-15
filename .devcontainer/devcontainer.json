@@ -31,7 +31,8 @@
 	// "remoteUser": "root"
 
 	"mounts": [ 
-		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
+		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
+		"source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind"
 	],
 
 	"containerEnv": {

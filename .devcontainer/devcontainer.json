@@ -25,8 +25,16 @@
 				"charliermarsh.ruff"
 			]
 		}
-	}
+	},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
+
+	"mounts": [ 
+		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
+	],
+
+	"containerEnv": {
+		"CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+	}
 }

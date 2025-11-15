@@ -14,3 +14,6 @@ ENV PATH="/home/vscode/google-cloud-sdk/bin:${PATH}"
 # install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/home/vscode/.local/bin:${PATH}"
+
+# install google-adk
+RUN uv tool install google-adk

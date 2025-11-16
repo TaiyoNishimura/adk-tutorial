@@ -35,7 +35,8 @@
 
 	"mounts": [ 
 		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
-		"source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind"
+		"source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind",
+		"source=${localEnv:HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind"
 	],
 
 	"containerEnv": {

@@ -1,7 +1,6 @@
 from google.adk.agents.llm_agent import Agent
 
-from my_agent.tools.get_current_time import get_current_time
-from my_agent.tools.get_weather import get_weather
+from my_agent.tools import get_current_time, get_weather
 
 root_agent = Agent(
     name="weather_agent_v1",

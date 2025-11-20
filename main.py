@@ -49,27 +49,34 @@ async def main():
     USER_ID = "user_1"
     SESSION_ID = "session_001"
 
+    initial_state = {"user_preference_temperature_unit": "Celsius"}
+
     session = await session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
+        app_name=APP_NAME, 
+        user_id=USER_ID, 
+        session_id=SESSION_ID, 
+        state=initial_state
     )
 
-    runner = Runner(
-        agent=root_agent,
-        app_name=APP_NAME,
-        session_service=session_service,
-    )
+    print(session.state)
 
-    queries = [
-        "What's the weather like in New York?",
-    ]
+    # runner = Runner(
+    #     agent=root_agent,
+    #     app_name=APP_NAME,
+    #     session_service=session_service,
+    # )
 
-    for query in queries:
-        await call_agent_async(
-            query=query,
-            runner=runner,
-            user_id=USER_ID,
-            session_id=session.id,
-        )
+    # queries = [
+    #     "What's the weather like in New York?",
+    # ]
+
+    # for query in queries:
+    #     await call_agent_async(
+    #         query=query,
+    #         runner=runner,
+    #         user_id=USER_ID,
+    #         session_id=session.id,
+    #     )
 
 
 if __name__ == "__main__":

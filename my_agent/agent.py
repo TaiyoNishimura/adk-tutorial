@@ -1,6 +1,6 @@
 from google.adk.agents.llm_agent import Agent
 
-from my_agent.tools import get_current_time, get_weather
+from my_agent.tools import get_current_time, get_weather_stateful
 
 from greeting_agent.agent import root_agent as greeting_agent
 from farewell_agent.agent import root_agent as farewell_agent
@@ -17,6 +17,7 @@ root_agent = Agent(
     "Analyze the user's query. If it's a greeting, delegate to 'greeting_agent'. If it's a farewell, delegate to 'farewell_agent'. "
     "If it's a weather request, handle it yourself using 'get_weather'. "
     "For anything else, respond appropriately or state you cannot handle it.",
-    tools=[get_current_time, get_weather],
+    tools=[get_current_time, get_weather_stateful],
     sub_agents=[greeting_agent, farewell_agent],
+    output_key="last_weather_report",
 )

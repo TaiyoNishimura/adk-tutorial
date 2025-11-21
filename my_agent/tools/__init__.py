@@ -1,2 +1,2 @@
-from .get_weather import get_weather
+from .get_weather import get_weather_stateful
 from .get_current_time import get_current_time

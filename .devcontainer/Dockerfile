@@ -19,6 +19,6 @@ ENV PATH="/home/vscode/google-cloud-sdk/bin:${PATH}"
 # install google-adk
 RUN uv tool install google-adk
 
-# install zsh-autusuggestions
+# install zsh-autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions /home/vscode/.zsh/zsh-autosuggestions
 RUN echo "source /home/vscode/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> /home/vscode/.zshrc

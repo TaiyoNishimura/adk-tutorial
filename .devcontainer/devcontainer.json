@@ -8,9 +8,7 @@
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	"features": {
-		"ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
-	},
+	"features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -22,6 +20,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"anthropic.claude-code",
 				"charliermarsh.ruff"
 			],
 			"settings": {
@@ -33,7 +32,7 @@
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 
-	"mounts": [ 
+	"mounts": [
 		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
 		"source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind",
 		"source=${localEnv:HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind"

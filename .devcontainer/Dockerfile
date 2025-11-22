@@ -4,6 +4,12 @@ USER vscode
 
 WORKDIR /home/vscode
 
+# install claude-code
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+    && export NVM_DIR="/usr/local/share/nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
+    && nvm install 22
+RUN npm i -g @anthropic-ai/claude-code
 
 # install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh

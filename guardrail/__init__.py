@@ -1,1 +1,2 @@
 from .block_keyword_guardrail import block_keyword_guardrail
+from .block_paris_tool_guardrail import block_paris_tool_guardrail

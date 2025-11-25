@@ -1,7 +1,7 @@
 from google.adk.agents.llm_agent import Agent
 
 from guardrail import block_paris_tool_guardrail
-from my_agent.tools import get_current_time, get_weather_stateful
+from .tools import get_current_time, get_weather_stateful
 
 from greeting_agent.agent import root_agent as greeting_agent
 from farewell_agent.agent import root_agent as farewell_agent

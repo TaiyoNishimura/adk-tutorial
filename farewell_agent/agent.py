@@ -1,5 +1,5 @@
 from google.adk.agents.llm_agent import Agent
-from farewell_agent.tools import say_goodbye
+from .tools import say_goodbye
 
 root_agent = Agent(
     model="gemini-2.0-flash",

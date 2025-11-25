@@ -1,5 +1,5 @@
 from google.adk.agents.llm_agent import Agent
-from greeting_agent.tools import say_hello
+from .tools import say_hello
 from guardrail import block_keyword_guardrail
 
 root_agent = Agent(

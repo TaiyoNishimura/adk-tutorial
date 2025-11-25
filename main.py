@@ -8,9 +8,9 @@ from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types
 
-from my_agent.agent import root_agent
+from agents.my_agent.agent import root_agent
 
-load_dotenv("my_agent/.env")
+load_dotenv("agents/my_agent/.env")
 
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.ERROR)

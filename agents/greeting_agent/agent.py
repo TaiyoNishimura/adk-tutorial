@@ -1,6 +1,6 @@
 from google.adk.agents.llm_agent import Agent
 from .tools import say_hello
-from guardrail import block_keyword_guardrail
+# from guardrail import block_keyword_guardrail
 
 root_agent = Agent(
     model="gemini-2.0-flash",
@@ -11,5 +11,5 @@ root_agent = Agent(
     "Do not engage in any other conversation or tasks.",
     description="Handles simple greetings and hellos using the 'say_hello' tool.",  # Crucial for delegation
     tools=[say_hello],
-    before_model_callback=block_keyword_guardrail,
+    # before_model_callback=block_keyword_guardrail,
 )

@@ -1,10 +1,10 @@
 from google.adk.agents.llm_agent import Agent
 
-from guardrail import block_paris_tool_guardrail
-from .tools import get_current_time, get_weather_stateful
+# from guardrail import block_paris_tool_guardrail
+from my_agent.tools import get_current_time, get_weather_stateful
 
-from greeting_agent.agent import root_agent as greeting_agent
-from farewell_agent.agent import root_agent as farewell_agent
+from agents.greeting_agent.agent import root_agent as greeting_agent
+from agents.farewell_agent.agent import root_agent as farewell_agent
 
 root_agent = Agent(
     name="weather_agent_v1",
@@ -19,7 +19,7 @@ root_agent = Agent(
     "If it's a weather request, handle it yourself using 'get_weather'. "
     "For anything else, respond appropriately or state you cannot handle it.",
     tools=[get_current_time, get_weather_stateful],
-    before_tool_callback=block_paris_tool_guardrail,
+    # before_tool_callback=block_paris_tool_guardrail,
     sub_agents=[greeting_agent, farewell_agent],
     output_key="last_weather_report",
 )

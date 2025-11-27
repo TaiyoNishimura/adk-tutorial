@@ -1,6 +1,8 @@
 # ADKチュートリアル - マルチエージェント天気アプリケーション
 
-Google ADK (Agent Development Kit) を使用したマルチエージェントシステムのチュートリアルプロジェクトです。エージェント間の委譲、ステートフルな会話、ガードレールの実装など、ADKの主要な機能を実演します。
+個人開発で使用しているGoogle ADK (Agent Development Kit) を使用したマルチエージェントシステムのチュートリアルプロジェクトです。
+
+[公式のリポジトリ](https://github.com/google/adk-docs/tree/main/examples/python/tutorial/agent_team/adk-tutorial)を参照ください。
 
 ## プロジェクト概要
 

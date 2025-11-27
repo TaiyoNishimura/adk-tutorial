@@ -11,3 +11,6 @@ wheels/
 
 # env
 .env
+
+# ADK eval history
+**/.adk/eval_history/

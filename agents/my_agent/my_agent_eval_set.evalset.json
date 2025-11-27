@@ -1,0 +1,107 @@
+{
+  "eval_set_id": "my_agent_eval_set",
+  "name": "my_agent_eval_set",
+  "eval_cases": [
+    {
+      "eval_id": "hello_from_greeting_agent",
+      "conversation": [
+        {
+          "invocation_id": "e-28dadb52-df11-4c30-8aa9-abf132aabcfa",
+          "user_content": {
+            "parts": [
+              {
+                "text": "hello"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Hello there!\n"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "weather_agent_v1",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-3e673114-b9c6-4ebd-aea4-817f663d8623",
+                        "args": {
+                          "agent_name": "greeting_agent"
+                        },
+                        "name": "transfer_to_agent"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "weather_agent_v1",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-3e673114-b9c6-4ebd-aea4-817f663d8623",
+                        "name": "transfer_to_agent",
+                        "response": {
+                          "result": null
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "greeting_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-fa2ec015-4f39-46f4-80dc-9a59a9b1f017",
+                        "args": {},
+                        "name": "say_hello"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "greeting_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-fa2ec015-4f39-46f4-80dc-9a59a9b1f017",
+                        "name": "say_hello",
+                        "response": {
+                          "result": "Hello there!"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1764241546.275094
+        }
+      ],
+      "session_input": {
+        "app_name": "my_agent",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1764242393.2833536
+    }
+  ],
+  "creation_timestamp": 1764242374.1492107
+}

@@ -1,0 +1,1314 @@
+{
+  "eval_set_result_id": "my_agent_my_agent_eval_set_1764242552.837021",
+  "eval_set_result_name": "my_agent_my_agent_eval_set_1764242552.837021",
+  "eval_set_id": "my_agent_eval_set",
+  "eval_case_results": [
+    {
+      "eval_set_file": "my_agent_eval_set",
+      "eval_set_id": "my_agent_eval_set",
+      "eval_id": "hello_from_greeting_agent",
+      "final_eval_status": 1,
+      "eval_metric_results": null,
+      "overall_eval_metric_results": [
+        {
+          "metric_name": "tool_trajectory_avg_score",
+          "threshold": 1.0,
+          "judge_model_options": null,
+          "criterion": null,
+          "score": 1.0,
+          "eval_status": 1,
+          "details": {
+            "rubric_scores": null
+          }
+        },
+        {
+          "metric_name": "response_match_score",
+          "threshold": 0.7,
+          "judge_model_options": null,
+          "criterion": null,
+          "score": 1.0,
+          "eval_status": 1,
+          "details": {
+            "rubric_scores": null
+          }
+        }
+      ],
+      "eval_metric_result_per_invocation": [
+        {
+          "actual_invocation": {
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "user_content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "hello",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "final_response": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Hello there!\n",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "intermediate_data": {
+              "invocation_events": [
+                {
+                  "author": "weather_agent_v1",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": {
+                          "id": "adk-d01b9a10-83bf-4bb8-8b48-45bedc967440",
+                          "args": {
+                            "agent_name": "greeting_agent"
+                          },
+                          "name": "transfer_to_agent"
+                        },
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "weather_agent_v1",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-d01b9a10-83bf-4bb8-8b48-45bedc967440",
+                          "name": "transfer_to_agent",
+                          "response": {
+                            "result": null
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "greeting_agent",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": {
+                          "id": "adk-5740015b-8dd6-404f-b236-1809b77ebe46",
+                          "args": {},
+                          "name": "say_hello"
+                        },
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "greeting_agent",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-5740015b-8dd6-404f-b236-1809b77ebe46",
+                          "name": "say_hello",
+                          "response": {
+                            "result": "Hello there!"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                }
+              ]
+            },
+            "creation_timestamp": 1764242549.973592,
+            "rubrics": null,
+            "app_details": {
+              "agent_details": {
+                "weather_agent_v1": {
+                  "name": "weather_agent_v1",
+                  "instructions": "You are the main Weather Agent coordinating a team. Your primary responsibility is to provide weather information. Use the 'get_weather' tool ONLY for specific weather requests (e.g., 'weather in London'). You have specialized sub-agents: 1. 'greeting_agent': Handles simple greetings like 'Hi', 'Hello'. Delegate to it for these. 2. 'farewell_agent': Handles simple farewells like 'Bye', 'See you'. Delegate to it for these. Analyze the user's query. If it's a greeting, delegate to 'greeting_agent'. If it's a farewell, delegate to 'farewell_agent'. If it's a weather request, handle it yourself using 'get_weather'. For anything else, respond appropriately or state you cannot handle it.\n\nYou are an agent. Your internal name is \"weather_agent_v1\". The description about you is \"The main coordinator agent. Handles weather requests and delegates greetings/farewells to specialists.\".\n\n\nYou have a list of other agents to transfer to:\n\n\nAgent name: greeting_agent\nAgent description: Handles simple greetings and hellos using the 'say_hello' tool.\n\n\nAgent name: farewell_agent\nAgent description: Handles simple farewells and goodbyes using the 'say_goodbye' tool.\n\n\nIf you are the best to answer the question according to your description, you\ncan answer it.\n\nIf another agent is better for answering the question according to its\ndescription, call `transfer_to_agent` function to transfer the\nquestion to that agent. When transferring, do not generate any text other than\nthe function call.\n\n**NOTE**: the only available agents for `transfer_to_agent` function are `farewell_agent`, `greeting_agent`.\n",
+                  "tool_declarations": [
+                    {
+                      "function_declarations": [
+                        {
+                          "behavior": null,
+                          "description": "Transfer the question to another agent.\n\nThis tool hands off control to another agent when it's more suitable to\nanswer the user's question according to the agent's description.\n\nArgs:\n  agent_name: the agent name to transfer to.\n",
+                          "name": "transfer_to_agent",
+                          "parameters": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": {
+                              "agent_name": {
+                                "additional_properties": null,
+                                "defs": null,
+                                "ref": null,
+                                "any_of": null,
+                                "default": null,
+                                "description": null,
+                                "enum": null,
+                                "example": null,
+                                "format": null,
+                                "items": null,
+                                "max_items": null,
+                                "max_length": null,
+                                "max_properties": null,
+                                "maximum": null,
+                                "min_items": null,
+                                "min_length": null,
+                                "min_properties": null,
+                                "minimum": null,
+                                "nullable": null,
+                                "pattern": null,
+                                "properties": null,
+                                "property_ordering": null,
+                                "required": null,
+                                "title": null,
+                                "type": "STRING"
+                              }
+                            },
+                            "property_ordering": null,
+                            "required": [
+                              "agent_name"
+                            ],
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "parameters_json_schema": null,
+                          "response": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": null,
+                            "property_ordering": null,
+                            "required": null,
+                            "title": null,
+                            "type": "NULL"
+                          },
+                          "response_json_schema": null
+                        },
+                        {
+                          "behavior": null,
+                          "description": "Returns the current time in a specified city.\n\nArgs:\n    city (str): The name of the city for which to retrieve the current time.\n\nReturns:\n    dict: status and result or error msg.\n",
+                          "name": "get_current_time",
+                          "parameters": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": {
+                              "city": {
+                                "additional_properties": null,
+                                "defs": null,
+                                "ref": null,
+                                "any_of": null,
+                                "default": null,
+                                "description": null,
+                                "enum": null,
+                                "example": null,
+                                "format": null,
+                                "items": null,
+                                "max_items": null,
+                                "max_length": null,
+                                "max_properties": null,
+                                "maximum": null,
+                                "min_items": null,
+                                "min_length": null,
+                                "min_properties": null,
+                                "minimum": null,
+                                "nullable": null,
+                                "pattern": null,
+                                "properties": null,
+                                "property_ordering": null,
+                                "required": null,
+                                "title": null,
+                                "type": "STRING"
+                              }
+                            },
+                            "property_ordering": null,
+                            "required": [
+                              "city"
+                            ],
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "parameters_json_schema": null,
+                          "response": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": null,
+                            "property_ordering": null,
+                            "required": null,
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "response_json_schema": null
+                        },
+                        {
+                          "behavior": null,
+                          "description": "Retrieves weather, converts temp unit based on session state.",
+                          "name": "get_weather_stateful",
+                          "parameters": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": {
+                              "city": {
+                                "additional_properties": null,
+                                "defs": null,
+                                "ref": null,
+                                "any_of": null,
+                                "default": null,
+                                "description": null,
+                                "enum": null,
+                                "example": null,
+                                "format": null,
+                                "items": null,
+                                "max_items": null,
+                                "max_length": null,
+                                "max_properties": null,
+                                "maximum": null,
+                                "min_items": null,
+                                "min_length": null,
+                                "min_properties": null,
+                                "minimum": null,
+                                "nullable": null,
+                                "pattern": null,
+                                "properties": null,
+                                "property_ordering": null,
+                                "required": null,
+                                "title": null,
+                                "type": "STRING"
+                              }
+                            },
+                            "property_ordering": null,
+                            "required": [
+                              "city"
+                            ],
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "parameters_json_schema": null,
+                          "response": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": null,
+                            "property_ordering": null,
+                            "required": null,
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "response_json_schema": null
+                        }
+                      ],
+                      "retrieval": null,
+                      "google_search_retrieval": null,
+                      "computer_use": null,
+                      "file_search": null,
+                      "code_execution": null,
+                      "enterprise_web_search": null,
+                      "google_maps": null,
+                      "google_search": null,
+                      "url_context": null
+                    }
+                  ]
+                },
+                "greeting_agent": {
+                  "name": "greeting_agent",
+                  "instructions": "You are the Greeting Agent. Your ONLY task is to provide a friendly greeting to the user. Use the 'say_hello' tool to generate the greeting. If the user provides their name, make sure to pass it to the tool. Do not engage in any other conversation or tasks.\n\nYou are an agent. Your internal name is \"greeting_agent\". The description about you is \"Handles simple greetings and hellos using the 'say_hello' tool.\".\n\n\nYou have a list of other agents to transfer to:\n\n\nAgent name: weather_agent_v1\nAgent description: The main coordinator agent. Handles weather requests and delegates greetings/farewells to specialists.\n\n\nAgent name: farewell_agent\nAgent description: Handles simple farewells and goodbyes using the 'say_goodbye' tool.\n\n\nIf you are the best to answer the question according to your description, you\ncan answer it.\n\nIf another agent is better for answering the question according to its\ndescription, call `transfer_to_agent` function to transfer the\nquestion to that agent. When transferring, do not generate any text other than\nthe function call.\n\n**NOTE**: the only available agents for `transfer_to_agent` function are `farewell_agent`, `weather_agent_v1`.\n\nIf neither you nor the other agents are best for the question, transfer to your parent agent weather_agent_v1.\n",
+                  "tool_declarations": [
+                    {
+                      "function_declarations": [
+                        {
+                          "behavior": null,
+                          "description": "Transfer the question to another agent.\n\nThis tool hands off control to another agent when it's more suitable to\nanswer the user's question according to the agent's description.\n\nArgs:\n  agent_name: the agent name to transfer to.\n",
+                          "name": "transfer_to_agent",
+                          "parameters": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": {
+                              "agent_name": {
+                                "additional_properties": null,
+                                "defs": null,
+                                "ref": null,
+                                "any_of": null,
+                                "default": null,
+                                "description": null,
+                                "enum": null,
+                                "example": null,
+                                "format": null,
+                                "items": null,
+                                "max_items": null,
+                                "max_length": null,
+                                "max_properties": null,
+                                "maximum": null,
+                                "min_items": null,
+                                "min_length": null,
+                                "min_properties": null,
+                                "minimum": null,
+                                "nullable": null,
+                                "pattern": null,
+                                "properties": null,
+                                "property_ordering": null,
+                                "required": null,
+                                "title": null,
+                                "type": "STRING"
+                              }
+                            },
+                            "property_ordering": null,
+                            "required": [
+                              "agent_name"
+                            ],
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "parameters_json_schema": null,
+                          "response": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": null,
+                            "property_ordering": null,
+                            "required": null,
+                            "title": null,
+                            "type": "NULL"
+                          },
+                          "response_json_schema": null
+                        },
+                        {
+                          "behavior": null,
+                          "description": "Provides a simple greeting. If a name is provided, it will be used.\n\nArgs:\n    name (str, optional): The name of the person to greet. Defaults to a generic greeting if not provided.\n\nReturns:\n    str: A friendly greeting message.\n",
+                          "name": "say_hello",
+                          "parameters": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": {
+                              "name": {
+                                "additional_properties": null,
+                                "defs": null,
+                                "ref": null,
+                                "any_of": null,
+                                "default": null,
+                                "description": null,
+                                "enum": null,
+                                "example": null,
+                                "format": null,
+                                "items": null,
+                                "max_items": null,
+                                "max_length": null,
+                                "max_properties": null,
+                                "maximum": null,
+                                "min_items": null,
+                                "min_length": null,
+                                "min_properties": null,
+                                "minimum": null,
+                                "nullable": true,
+                                "pattern": null,
+                                "properties": null,
+                                "property_ordering": null,
+                                "required": null,
+                                "title": null,
+                                "type": "STRING"
+                              }
+                            },
+                            "property_ordering": null,
+                            "required": [],
+                            "title": null,
+                            "type": "OBJECT"
+                          },
+                          "parameters_json_schema": null,
+                          "response": {
+                            "additional_properties": null,
+                            "defs": null,
+                            "ref": null,
+                            "any_of": null,
+                            "default": null,
+                            "description": null,
+                            "enum": null,
+                            "example": null,
+                            "format": null,
+                            "items": null,
+                            "max_items": null,
+                            "max_length": null,
+                            "max_properties": null,
+                            "maximum": null,
+                            "min_items": null,
+                            "min_length": null,
+                            "min_properties": null,
+                            "minimum": null,
+                            "nullable": null,
+                            "pattern": null,
+                            "properties": null,
+                            "property_ordering": null,
+                            "required": null,
+                            "title": null,
+                            "type": "STRING"
+                          },
+                          "response_json_schema": null
+                        }
+                      ],
+                      "retrieval": null,
+                      "google_search_retrieval": null,
+                      "computer_use": null,
+                      "file_search": null,
+                      "code_execution": null,
+                      "enterprise_web_search": null,
+                      "google_maps": null,
+                      "google_search": null,
+                      "url_context": null
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "expected_invocation": {
+            "invocation_id": "e-28dadb52-df11-4c30-8aa9-abf132aabcfa",
+            "user_content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "hello",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "final_response": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Hello there!\n",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "intermediate_data": {
+              "invocation_events": [
+                {
+                  "author": "weather_agent_v1",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": {
+                          "id": "adk-3e673114-b9c6-4ebd-aea4-817f663d8623",
+                          "args": {
+                            "agent_name": "greeting_agent"
+                          },
+                          "name": "transfer_to_agent"
+                        },
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "weather_agent_v1",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-3e673114-b9c6-4ebd-aea4-817f663d8623",
+                          "name": "transfer_to_agent",
+                          "response": {
+                            "result": null
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "greeting_agent",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": {
+                          "id": "adk-fa2ec015-4f39-46f4-80dc-9a59a9b1f017",
+                          "args": {},
+                          "name": "say_hello"
+                        },
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "greeting_agent",
+                  "content": {
+                    "parts": [
+                      {
+                        "function_call": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-fa2ec015-4f39-46f4-80dc-9a59a9b1f017",
+                          "name": "say_hello",
+                          "response": {
+                            "result": "Hello there!"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                }
+              ]
+            },
+            "creation_timestamp": 1764241546.275094,
+            "rubrics": null,
+            "app_details": null
+          },
+          "eval_metric_results": [
+            {
+              "metric_name": "tool_trajectory_avg_score",
+              "threshold": 1.0,
+              "judge_model_options": null,
+              "criterion": null,
+              "score": 1.0,
+              "eval_status": 1,
+              "details": {
+                "rubric_scores": null
+              }
+            },
+            {
+              "metric_name": "response_match_score",
+              "threshold": 0.7,
+              "judge_model_options": null,
+              "criterion": null,
+              "score": 1.0,
+              "eval_status": 1,
+              "details": {
+                "rubric_scores": null
+              }
+            }
+          ]
+        }
+      ],
+      "session_id": "___eval___session___2d64531c-712a-4ea9-a756-5dd0161b3963",
+      "session_details": {
+        "id": "___eval___session___2d64531c-712a-4ea9-a756-5dd0161b3963",
+        "app_name": "my_agent",
+        "user_id": "user",
+        "state": {
+          "__llm_request_key__": "51ab51a4-10de-49e4-9864-24a061aecaea"
+        },
+        "events": [
+          {
+            "model_version": null,
+            "content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "hello",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": null,
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": null,
+            "usage_metadata": null,
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": null,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "user",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {},
+              "artifact_delta": {},
+              "transfer_to_agent": null,
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": null,
+            "branch": null,
+            "id": "b7f47c08-ad0f-48db-87bc-eb51ca1741cd",
+            "timestamp": 1764242547.458379
+          },
+          {
+            "model_version": "gemini-2.0-flash",
+            "content": {
+              "parts": [
+                {
+                  "function_call": {
+                    "id": "adk-d01b9a10-83bf-4bb8-8b48-45bedc967440",
+                    "args": {
+                      "agent_name": "greeting_agent"
+                    },
+                    "name": "transfer_to_agent"
+                  },
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": null,
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": "STOP",
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": {
+              "__llm_request_key__": "9229fdeb-78e4-475b-9a7c-f156849db8c2"
+            },
+            "usage_metadata": {
+              "cache_tokens_details": null,
+              "cached_content_token_count": null,
+              "candidates_token_count": 11,
+              "candidates_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 11
+                }
+              ],
+              "prompt_token_count": 521,
+              "prompt_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 521
+                }
+              ],
+              "thoughts_token_count": null,
+              "tool_use_prompt_token_count": null,
+              "tool_use_prompt_tokens_details": null,
+              "total_token_count": 532,
+              "traffic_type": "ON_DEMAND"
+            },
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": -0.004800130359151147,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "weather_agent_v1",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {
+                "__llm_request_key__": "9229fdeb-78e4-475b-9a7c-f156849db8c2"
+              },
+              "artifact_delta": {},
+              "transfer_to_agent": null,
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": [],
+            "branch": null,
+            "id": "dc6df3ea-9339-4121-9592-b5f85af2b55f",
+            "timestamp": 1764242547.460396
+          },
+          {
+            "model_version": null,
+            "content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": {
+                    "will_continue": null,
+                    "scheduling": null,
+                    "parts": null,
+                    "id": "adk-d01b9a10-83bf-4bb8-8b48-45bedc967440",
+                    "name": "transfer_to_agent",
+                    "response": {
+                      "result": null
+                    }
+                  },
+                  "inline_data": null,
+                  "text": null,
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": null,
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": null,
+            "usage_metadata": null,
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": null,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "weather_agent_v1",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {},
+              "artifact_delta": {},
+              "transfer_to_agent": "greeting_agent",
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": null,
+            "branch": null,
+            "id": "28f6e81d-3082-4902-a382-47861bc3ddd6",
+            "timestamp": 1764242549.976914
+          },
+          {
+            "model_version": "gemini-2.0-flash",
+            "content": {
+              "parts": [
+                {
+                  "function_call": {
+                    "id": "adk-5740015b-8dd6-404f-b236-1809b77ebe46",
+                    "args": {},
+                    "name": "say_hello"
+                  },
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": null,
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": "STOP",
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": {
+              "__llm_request_key__": "7626c0a9-6c84-445b-a53e-f84b883cf98d"
+            },
+            "usage_metadata": {
+              "cache_tokens_details": null,
+              "cached_content_token_count": null,
+              "candidates_token_count": 3,
+              "candidates_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 3
+                }
+              ],
+              "prompt_token_count": 488,
+              "prompt_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 488
+                }
+              ],
+              "thoughts_token_count": null,
+              "tool_use_prompt_token_count": null,
+              "tool_use_prompt_tokens_details": null,
+              "total_token_count": 491,
+              "traffic_type": "ON_DEMAND"
+            },
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": -0.0010487563752879698,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "greeting_agent",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {
+                "__llm_request_key__": "7626c0a9-6c84-445b-a53e-f84b883cf98d"
+              },
+              "artifact_delta": {},
+              "transfer_to_agent": null,
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": [],
+            "branch": null,
+            "id": "b44349f3-7f6a-41ed-a2b4-98da959ade25",
+            "timestamp": 1764242549.987667
+          },
+          {
+            "model_version": null,
+            "content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": {
+                    "will_continue": null,
+                    "scheduling": null,
+                    "parts": null,
+                    "id": "adk-5740015b-8dd6-404f-b236-1809b77ebe46",
+                    "name": "say_hello",
+                    "response": {
+                      "result": "Hello there!"
+                    }
+                  },
+                  "inline_data": null,
+                  "text": null,
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": null,
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": null,
+            "usage_metadata": null,
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": null,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "greeting_agent",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {},
+              "artifact_delta": {},
+              "transfer_to_agent": null,
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": null,
+            "branch": null,
+            "id": "24c47d9a-91ef-44bf-a5fe-19c1bdfa236a",
+            "timestamp": 1764242551.421293
+          },
+          {
+            "model_version": "gemini-2.0-flash",
+            "content": {
+              "parts": [
+                {
+                  "function_call": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Hello there!\n",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "grounding_metadata": null,
+            "partial": null,
+            "turn_complete": null,
+            "finish_reason": "STOP",
+            "error_code": null,
+            "error_message": null,
+            "interrupted": null,
+            "custom_metadata": {
+              "__llm_request_key__": "51ab51a4-10de-49e4-9864-24a061aecaea"
+            },
+            "usage_metadata": {
+              "cache_tokens_details": null,
+              "cached_content_token_count": null,
+              "candidates_token_count": 4,
+              "candidates_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 4
+                }
+              ],
+              "prompt_token_count": 498,
+              "prompt_tokens_details": [
+                {
+                  "modality": "TEXT",
+                  "token_count": 498
+                }
+              ],
+              "thoughts_token_count": null,
+              "tool_use_prompt_token_count": null,
+              "tool_use_prompt_tokens_details": null,
+              "total_token_count": 502,
+              "traffic_type": "ON_DEMAND"
+            },
+            "live_session_resumption_update": null,
+            "input_transcription": null,
+            "output_transcription": null,
+            "avg_logprobs": -1.0757252312032506e-05,
+            "logprobs_result": null,
+            "cache_metadata": null,
+            "citation_metadata": null,
+            "invocation_id": "e-42a7e8db-8a08-493f-993d-4cca9874f70a",
+            "author": "greeting_agent",
+            "actions": {
+              "skip_summarization": null,
+              "state_delta": {
+                "__llm_request_key__": "51ab51a4-10de-49e4-9864-24a061aecaea"
+              },
+              "artifact_delta": {},
+              "transfer_to_agent": null,
+              "escalate": null,
+              "requested_auth_configs": {},
+              "requested_tool_confirmations": {},
+              "compaction": null,
+              "end_of_agent": null,
+              "agent_state": null,
+              "rewind_before_invocation_id": null
+            },
+            "long_running_tool_ids": null,
+            "branch": null,
+            "id": "1075a07b-f70c-4739-ab12-6963431dc3af",
+            "timestamp": 1764242551.424393
+          }
+        ],
+        "last_update_time": 1764242551.424393
+      },
+      "user_id": "user"
+    }
+  ],
+  "creation_timestamp": 1764242552.837021
+}

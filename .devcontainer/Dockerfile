@@ -22,9 +22,6 @@ RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 && ./google-cloud-sdk/install.sh
 ENV PATH="/home/vscode/google-cloud-sdk/bin:${PATH}"
 
-# install google-adk
-RUN uv tool install google-adk
-
 # install zsh-autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions /home/vscode/.zsh/zsh-autosuggestions
 RUN echo "source /home/vscode/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> /home/vscode/.zshrc

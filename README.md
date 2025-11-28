@@ -106,3 +106,8 @@ uv sync
 uv run main.py
 ```
 
+### adk webの起動
+
+```bash
+uv run adk web agents
+```

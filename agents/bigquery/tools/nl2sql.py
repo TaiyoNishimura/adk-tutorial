@@ -2,6 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+MAX_NUM_ROWS = 10000
+
 def bigquery_nl2sql(question: str) -> str:
     """自然言語の問い合わせからSQLクエリを生成する
 
@@ -57,4 +59,25 @@ SQL `AS`文を使用して、テーブル列やテーブル自体に一時的に
 ベストプラクティスを慎重に検討して、正しいBigQuery SQLを生成してください。
 
    """
+
+    schema = """
+テーブル: `products`
+カラム:
+- product_id (STRING): 商品ID
+- product_name (STRING): 商品名
+- price (FLOAT64): 価格
+- category (STRING): カテゴリ
+
+サンプル値:
+product_id | product_name | price | category
+---------- | ------------ | ----- | --------
+'P001'     | 'ノートPC'    | 99800 | '電子機器'
+'P002'     | 'マウス'      | 2980  | '周辺機器'
+'P003'     | 'キーボード'  | 8900  | '周辺機器'
+"""
+    prompt = prompt_template.format(
+        MAX_NUM_ROWS=MAX_NUM_ROWS, SCHEMA=schema, QUESTION=question
+    )
+
+    
     return "SELECT * FROM example_table LIMIT 10;"

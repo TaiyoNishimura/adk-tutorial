@@ -1,8 +1,27 @@
 import logging
+import os
+
+from google.genai import Client
+from google.genai.types import HttpOptions
 
 logger = logging.getLogger(__name__)
 
+# TODO: 環境変数を深い階層で取得しないようにする
+vertex_project = os.environ["GOOGLE_CLOUD_PROJECT"]
+location = os.environ["GOOGLE_CLOUD_LOCATION"]
+model = os.environ["NL2SQL_MODEL"]
+http_options = HttpOptions(
+    headers={"user-agent": "USER_AGENT"}  # TODO: replace USER_AGENT
+)
+llm_client = Client(
+    vertexai=True,
+    project=vertex_project,
+    location=location,
+    http_options=http_options,
+)
+
 MAX_NUM_ROWS = 10000
+
 
 def bigquery_nl2sql(question: str) -> str:
     """Generates a SQL query from a natural language question.
@@ -87,7 +106,17 @@ def bigquery_nl2sql(question: str) -> str:
     prompt = prompt_template.format(
         MAX_NUM_ROWS=MAX_NUM_ROWS, SCHEMA=schema, QUESTION=question
     )
-    logger.debug("bigquery_nl2sql - prompt:\n%s", prompt)
 
-    
-    return "SELECT * FROM products ORDER BY price DESC LIMIT 10;"
+    response = llm_client.models.generate_content(
+        model=model,
+        contents=prompt,
+        config={"temperature": 0.1},
+    )
+
+    sql = response.text
+    if sql:
+        sql = sql.replace("```sql", "").replace("```", "").strip()
+
+    logger.debug("bigquery_nl2sql - sql:\n%s", sql)
+
+    return sql

@@ -14,3 +14,6 @@ wheels/
 
 # ADK eval history
 **/.adk/eval_history/
+
+# adk samples
+adk-samples/

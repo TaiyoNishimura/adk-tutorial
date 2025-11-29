@@ -5,79 +5,89 @@ logger = logging.getLogger(__name__)
 MAX_NUM_ROWS = 10000
 
 def bigquery_nl2sql(question: str) -> str:
-    """自然言語の問い合わせからSQLクエリを生成する
+    """Generates a SQL query from a natural language question.
 
     Args:
-        question (str): 自然言語の質問
+        question (str): Natural language question.
+        tool_context (ToolContext): The tool context to use for generating the
+            SQL query.
 
     Returns:
-        str: 質問に回答するために生成されたSQL
+        str: An SQL statement to answer this question.
     """
     logger.debug("bigquery_nl2sql - question: %s", question)
 
     prompt_template = """
-あなたはBigQuery SQLの専門家で、ユーザーの自然言語の質問に基づいて
-Google SQL方言でSQLを生成する任務を担っています。
-提供されたコンテキストを使用しながら、以下の質問に答えるBigquery SQLクエリを
-作成することがあなたのタスクです。
+        You are a BigQuery SQL expert tasked with generating SQL in the Google SQL
+        dialect based on the user's natural language question.
+        Your task is to write a Bigquery SQL query that answers the following question
+        while using the provided context.
 
-**ガイドライン:**
+        **Guidelines:**
 
-- **テーブル参照:** SQL文では常にデータベースプレフィックス付きの完全なテーブル名を
-使用してください。テーブルはバッククォート(`)で囲まれた完全修飾名を使用して
-参照する必要があります。例: `project_name.dataset_name.table_name`
-テーブル名は大文字小文字を区別します。
-- **結合:** できるだけ少ないテーブルを結合してください。テーブルを結合する際は、
-すべての結合列が同じデータ型であることを確認してください。データベースと
-テーブルスキーマを分析して、列とテーブル間の関係を理解してください。
-- **集約:** `SELECT`文のすべての非集約列を`GROUP BY`句に含めてください。
-- **SQL構文:** プロパティマッピング（project_id、owner、table、column関係）が
-正しいBigQuery用の構文的および意味的に正しいSQLを返してください。必要に応じて
-SQL `AS`文を使用して、テーブル列やテーブル自体に一時的に新しい名前を割り当てて
-ください。サブクエリとUNIONクエリは常に括弧で囲んでください。
-- **列の使用:** テーブルスキーマに記載されている列名（column_name）*のみ*を
-使用してください。他の列名は使用*しないで*ください。テーブルスキーマに記載されて
-いる`column_name`は、テーブルスキーマで指定された`table_name`のみに関連付けて
-ください。
-- **フィルター:** 返される総行数を削減・最小化するために、効果的にクエリを記述
-する必要があります。例えば、SQLクエリでフィルター（`WHERE`、`HAVING`など）や
-集約関数（'COUNT'、'SUM'など）を使用できます。
-- **行数制限:** 返される行の最大数は{MAX_NUM_ROWS}未満である必要があります。
+        - **Table Referencing:** Always use the full table name with the database prefix
+        in the SQL statement.  Tables should be referred to using a fully qualified
+        name with enclosed in backticks (`) e.g.
+        `project_name.dataset_name.table_name`.  Table names are case sensitive.
+        - **Joins:** Join as few tables as possible. When joining tables, ensure all
+        join columns are the same data type. Analyze the database and the table schema
+        provided to understand the relationships between columns and tables.
+        - **Aggregations:**  Use all non-aggregated columns from the `SELECT` statement
+        in the `GROUP BY` clause.
+        - **SQL Syntax:** Return syntactically and semantically correct SQL for BigQuery
+        with proper relation mapping (i.e., project_id, owner, table, and column
+        relation). Use SQL `AS` statement to assign a new name temporarily to a table
+        column or even a table wherever needed. Always enclose subqueries and union
+        queries in parentheses.
+        - **Column Usage:** Use *ONLY* the column names (column_name) mentioned in the
+        Table Schema. Do *NOT* use any other column names. Associate `column_name`
+        mentioned in the Table Schema only to the `table_name` specified under Table
+        Schema.
+        - **FILTERS:** You should write query effectively  to reduce and minimize the
+        total rows to be returned. For example, you can use filters (like `WHERE`,
+        `HAVING`, etc. (like 'COUNT', 'SUM', etc.) in the SQL query.
+        - **LIMIT ROWS:**  The maximum number of rows returned should be less than
+        {MAX_NUM_ROWS}.
 
-**スキーマ:**
+        **Schema:**
 
-データベース構造は以下のテーブルスキーマ（サンプル行を含む可能性あり）によって
-定義されています:
+        The database structure is defined by the following table schemas (possibly with
+        sample rows):
 
-{SCHEMA}
+        ```
+        {SCHEMA}
+        ```
 
-**自然言語の質問:**
+        **Natural language question:**
 
-{QUESTION}
+        ```
+        {QUESTION}
+        ```
 
-**段階的に考えてください:** 上記で概説されたスキーマ、質問、ガイドライン、
-ベストプラクティスを慎重に検討して、正しいBigQuery SQLを生成してください。
-
-   """
+        **Think Step-by-Step:** Carefully consider the schema, question, guidelines, and
+        best practices outlined above to generate the correct BigQuery SQL.
+    """
 
     schema = """
-テーブル: `products`
-カラム:
-- product_id (STRING): 商品ID
-- product_name (STRING): 商品名
-- price (FLOAT64): 価格
-- category (STRING): カテゴリ
+        table: `products`
+        columns:
+        - product_id (STRING): 商品ID
+        - product_name (STRING): 商品名
+        - price (FLOAT64): 価格
+        - category (STRING): カテゴリ
 
-サンプル値:
-product_id | product_name | price | category
----------- | ------------ | ----- | --------
-'P001'     | 'ノートPC'    | 99800 | '電子機器'
-'P002'     | 'マウス'      | 2980  | '周辺機器'
-'P003'     | 'キーボード'  | 8900  | '周辺機器'
-"""
+        example_values:
+        product_id | product_name | price | category
+        ---------- | ------------ | ----- | --------
+        'P001'     | 'ノートPC'    | 99800 | '電子機器'
+        'P002'     | 'マウス'      | 2980  | '周辺機器'
+        'P003'     | 'キーボード'  | 8900  | '周辺機器'
+    """
+
     prompt = prompt_template.format(
         MAX_NUM_ROWS=MAX_NUM_ROWS, SCHEMA=schema, QUESTION=question
     )
+    logger.debug("bigquery_nl2sql - prompt:\n%s", prompt)
 
     
-    return "SELECT * FROM example_table LIMIT 10;"
+    return "SELECT * FROM products ORDER BY price DESC LIMIT 10;"

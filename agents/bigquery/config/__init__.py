@@ -1,3 +1,3 @@
-from .nl2sql import Nl2SqlConfig
+from .nl2sql_model import Nl2SqlModelConfig
 
-__all__ = ["Nl2SqlConfig"]
+__all__ = ["Nl2SqlModelConfig"]

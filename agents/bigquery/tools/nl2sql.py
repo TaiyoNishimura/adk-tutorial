@@ -3,11 +3,11 @@ import logging
 from google.genai import Client
 from google.genai.types import HttpOptions, HttpRetryOptions
 
-from ..config import Nl2SqlConfig
+from ..config import Nl2SqlModelConfig
 
 logger = logging.getLogger(__name__)
 
-config = Nl2SqlConfig.from_env()
+nl2sqlModelConfig = Nl2SqlModelConfig.from_env()
 
 http_options = HttpOptions(
     headers={"user-agent": "bigquery-agent/0.1.0"},
@@ -20,8 +20,8 @@ http_options = HttpOptions(
 )
 llm_client = Client(
     vertexai=True,
-    project=config.google_cloud_project,
-    location=config.google_cloud_location,
+    project=nl2sqlModelConfig.google_cloud_project,
+    location=nl2sqlModelConfig.google_cloud_location,
     http_options=http_options,
 )
 
@@ -115,7 +115,7 @@ def bigquery_nl2sql(question: str) -> str:
     # リトライはHttpRetryOptionsで指定している
     # TODO: クライアントの関心ごとを別クラスに分離する
     response = llm_client.models.generate_content(
-        model=config.nl2sql_model,
+        model=nl2sqlModelConfig.nl2sql_model,
         contents=prompt,
         config={"temperature": 0.1},
     )

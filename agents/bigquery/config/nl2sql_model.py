@@ -3,17 +3,17 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Nl2SqlConfig:
+class Nl2SqlModelConfig:
     google_cloud_project: str
     google_cloud_location: str
     nl2sql_model: str
 
     @classmethod
-    def from_env(cls) -> "Nl2SqlConfig":
+    def from_env(cls) -> "Nl2SqlModelConfig":
         """Create configuration from environment variables.
 
         Returns:
-            Nl2SqlConfig: Configuration instance populated from environment variables.
+            Nl2SqlModelConfig: Configuration instance populated from environment variables.
 
         Raises:
             KeyError: If required environment variables are not set.

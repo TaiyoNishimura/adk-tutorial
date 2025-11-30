@@ -55,4 +55,5 @@ root_agent = Agent(
     """,
     tools=[bigquery_nl2sql],
     before_agent_callback=set_database_settings_before_agent_call,
+    generate_content_config=types.GenerateContentConfig(temperature=0.01),
 )

@@ -21,8 +21,9 @@ class BigqueryDataConfig:
         return cls(
             data_project_id=os.environ["BQ_DATA_PROJECT_ID"],
             dataset_id=os.environ["BQ_DATASET_ID"],
-            schema="""
-                table: `products`
+            # TODO: big queryのschemaを自動取得するようにする
+            schema=f"""
+                table: `{os.environ["BQ_DATASET_ID"]}.products`
                 columns:
                 - product_id (STRING): 商品ID
                 - product_name (STRING): 商品名

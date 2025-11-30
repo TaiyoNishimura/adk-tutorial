@@ -1,5 +1,23 @@
 from google.adk.agents.llm_agent import Agent
+from google.adk.agents.callback_context import CallbackContext
+
+from google.genai import types
+
 from .tools import bigquery_nl2sql
+
+from .config import BigqueryDataConfig
+
+bigquery_data_config = BigqueryDataConfig.from_env()
+
+
+def set_database_settings_before_agent_call(callback_context: CallbackContext) -> None:
+    if "database_settings" not in callback_context.state:
+        callback_context.state["database_settings"] = {
+            "data_project_id": bigquery_data_config.data_project_id,
+            "dataset_id": bigquery_data_config.dataset_id,
+            "schema": bigquery_data_config.schema,
+        }
+
 
 root_agent = Agent(
     model="gemini-2.0-flash",
@@ -36,4 +54,5 @@ root_agent = Agent(
         pass any other project id.
     """,
     tools=[bigquery_nl2sql],
+    before_agent_callback=set_database_settings_before_agent_call,
 )

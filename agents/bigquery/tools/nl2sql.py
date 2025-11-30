@@ -1,5 +1,7 @@
 import logging
 
+from google.adk.tools import ToolContext
+
 from google.genai import Client
 from google.genai.types import HttpOptions, HttpRetryOptions
 
@@ -28,7 +30,10 @@ llm_client = Client(
 MAX_NUM_ROWS = 10000
 
 
-def bigquery_nl2sql(question: str) -> str:
+def bigquery_nl2sql(
+    question: str,
+    tool_context: ToolContext,
+) -> str:
     """Generates a SQL query from a natural language question.
 
     Args:
@@ -92,21 +97,7 @@ def bigquery_nl2sql(question: str) -> str:
         best practices outlined above to generate the correct BigQuery SQL.
     """
 
-    schema = """
-        table: `products`
-        columns:
-        - product_id (STRING): 商品ID
-        - product_name (STRING): 商品名
-        - price (FLOAT64): 価格
-        - category (STRING): カテゴリ
-
-        example_values:
-        product_id | product_name | price | category
-        ---------- | ------------ | ----- | --------
-        'P001'     | 'ノートPC'    | 99800 | '電子機器'
-        'P002'     | 'マウス'      | 2980  | '周辺機器'
-        'P003'     | 'キーボード'  | 8900  | '周辺機器'
-    """
+    schema = tool_context.state["database_settings"]["schema"]
 
     prompt = prompt_template.format(
         MAX_NUM_ROWS=MAX_NUM_ROWS, SCHEMA=schema, QUESTION=question

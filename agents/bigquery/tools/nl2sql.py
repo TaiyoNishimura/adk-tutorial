@@ -1,22 +1,21 @@
 import logging
-import os
 
 from google.genai import Client
 from google.genai.types import HttpOptions
 
+from ..config import Nl2SqlConfig
+
 logger = logging.getLogger(__name__)
 
-# TODO: 環境変数を深い階層で取得しないようにする
-vertex_project = os.environ["GOOGLE_CLOUD_PROJECT"]
-location = os.environ["GOOGLE_CLOUD_LOCATION"]
-model = os.environ["NL2SQL_MODEL"]
+config = Nl2SqlConfig.from_env()
+
 http_options = HttpOptions(
     headers={"user-agent": "USER_AGENT"}  # TODO: replace USER_AGENT
 )
 llm_client = Client(
     vertexai=True,
-    project=vertex_project,
-    location=location,
+    project=config.google_cloud_project,
+    location=config.google_cloud_location,
     http_options=http_options,
 )
 
@@ -108,7 +107,7 @@ def bigquery_nl2sql(question: str) -> str:
     )
 
     response = llm_client.models.generate_content(
-        model=model,
+        model=config.nl2sql_model,
         contents=prompt,
         config={"temperature": 0.1},
     )

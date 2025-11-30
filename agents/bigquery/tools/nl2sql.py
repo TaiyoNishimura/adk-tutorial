@@ -1,7 +1,7 @@
 import logging
 
 from google.genai import Client
-from google.genai.types import HttpOptions
+from google.genai.types import HttpOptions, HttpRetryOptions
 
 from ..config import Nl2SqlConfig
 
@@ -10,7 +10,13 @@ logger = logging.getLogger(__name__)
 config = Nl2SqlConfig.from_env()
 
 http_options = HttpOptions(
-    headers={"user-agent": "bigquery-agent/0.1.0"}
+    headers={"user-agent": "bigquery-agent/0.1.0"},
+    retry_options=HttpRetryOptions(
+        attempts=5,
+        initial_delay=1.0,
+        max_delay=60.0,
+        exp_base=2,
+    ),
 )
 llm_client = Client(
     vertexai=True,
@@ -106,6 +112,8 @@ def bigquery_nl2sql(question: str) -> str:
         MAX_NUM_ROWS=MAX_NUM_ROWS, SCHEMA=schema, QUESTION=question
     )
 
+    # リトライはHttpRetryOptionsで指定している
+    # TODO: クライアントの関心ごとを別クラスに分離する
     response = llm_client.models.generate_content(
         model=config.nl2sql_model,
         contents=prompt,

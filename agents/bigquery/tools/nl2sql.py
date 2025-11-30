@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 config = Nl2SqlConfig.from_env()
 
 http_options = HttpOptions(
-    headers={"user-agent": "USER_AGENT"}  # TODO: replace USER_AGENT
+    headers={"user-agent": "bigquery-agent/0.1.0"}
 )
 llm_client = Client(
     vertexai=True,

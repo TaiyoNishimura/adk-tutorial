@@ -117,4 +117,6 @@ def bigquery_nl2sql(
 
     logger.debug("bigquery_nl2sql - sql:\n%s", sql)
 
+    tool_context.state["sql_query"] = sql
+
     return sql

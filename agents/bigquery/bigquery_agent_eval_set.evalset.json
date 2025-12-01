@@ -1,0 +1,127 @@
+{
+  "eval_set_id": "bigquery_agent_eval_set",
+  "name": "bigquery_agent_eval_set",
+  "eval_cases": [
+    {
+      "eval_id": "list_products_order_by_price",
+      "conversation": [
+        {
+          "invocation_id": "e-038526d0-4340-47d6-95e2-d44bddf9a4f4",
+          "user_content": {
+            "parts": [
+              {
+                "text": "プロダクトを価格が高い順に教えて"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "価格の高い順に製品を表示するSQLクエリを生成し、実行しました。結果を自然言語で要約します。\n\n```json\n{\n\"explain\": \"まず、bigquery_nl2sqlツールを使用して、自然言語の質問からSQLクエリを生成しました。次に、execute_sqlツールを使用して、生成されたSQLクエリを実行し、結果を取得しました。最後に、SQLクエリの結果を自然言語で要約しました。\",\n\"sql\": \"SELECT\\n    `vertex-ai-477703.sample_dataset.products`.product_name,\\n    `vertex-ai-477703.sample_dataset.products`.price\\nFROM\\n    `vertex-ai-477703.sample_dataset.products`\\nORDER BY\\n    `vertex-ai-477703.sample_dataset.products`.price DESC\\nLIMIT 10000\",\n\"sql_results\": {\n\"rows\": [\n{\n\"price\": 99800,\n\"product_name\": \"ノートPC\"\n},\n{\n\"price\": 8900,\n\"product_name\": \"キーボード\"\n},\n{\n\"price\": 2980,\n\"product_name\": \"マウス\"\n}\n],\n\"status\": \"SUCCESS\"\n},\n\"nl_results\": \"製品は、ノートPC（99800円）、キーボード（8900円）、マウス（2980円）の順に価格が高くなっています。\"\n}\n```"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "bigquery_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-e3116b1b-dd28-402e-8a3a-f10291ec1d23",
+                        "args": {
+                          "question": "プロダクトを価格が高い順に教えて"
+                        },
+                        "name": "bigquery_nl2sql"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "bigquery_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-e3116b1b-dd28-402e-8a3a-f10291ec1d23",
+                        "name": "bigquery_nl2sql",
+                        "response": {
+                          "result": "SELECT\n    `vertex-ai-477703.sample_dataset.products`.product_name,\n    `vertex-ai-477703.sample_dataset.products`.price\nFROM\n    `vertex-ai-477703.sample_dataset.products`\nORDER BY\n    `vertex-ai-477703.sample_dataset.products`.price DESC\nLIMIT 10000"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "bigquery_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "SQLクエリを生成しました。次に、このクエリを実行して結果を取得します。\n"
+                    },
+                    {
+                      "function_call": {
+                        "id": "adk-19b04812-c066-463a-ad37-662e8031a97f",
+                        "args": {
+                          "project_id": "vertex-ai-477703",
+                          "query": "SELECT\n    `vertex-ai-477703.sample_dataset.products`.product_name,\n    `vertex-ai-477703.sample_dataset.products`.price\nFROM\n    `vertex-ai-477703.sample_dataset.products`\nORDER BY\n    `vertex-ai-477703.sample_dataset.products`.price DESC\nLIMIT 10000"
+                        },
+                        "name": "execute_sql"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "bigquery_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-19b04812-c066-463a-ad37-662e8031a97f",
+                        "name": "execute_sql",
+                        "response": {
+                          "status": "SUCCESS",
+                          "rows": [
+                            {
+                              "product_name": "ノートPC",
+                              "price": 99800
+                            },
+                            {
+                              "product_name": "キーボード",
+                              "price": 8900
+                            },
+                            {
+                              "product_name": "マウス",
+                              "price": 2980
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1764587598.743109
+        }
+      ],
+      "session_input": {
+        "app_name": "bigquery",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1764587723.7013435
+    }
+  ],
+  "creation_timestamp": 1764587698.748355
+}

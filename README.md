@@ -25,12 +25,12 @@
 - **farewell_agent** (別れエージェント)
   - ユーザーの別れの挨拶に応答
 
-### ツール
-
-- **get_weather_stateful**: セッション状態から温度単位設定を読み取り、指定された都市の天気情報を返す
-- **get_current_time**: 指定された都市の現在時刻を返す
-- **say_hello**: 挨拶メッセージを生成（オプションで名前を指定可能）
-- **say_goodbye**: 別れのメッセージを生成
+- **bigquery_agent** (BigQueryエージェント)
+  - 自然言語からBigQuery SQLを生成・実行
+  - NL2SQLツールを使用してSQLクエリを生成
+  - BigQueryのexecute_sqlツール（ADK組み込み）でクエリを実行
+  - 日本語での質問と回答に対応
+  - JSON形式で詳細な結果を返却（説明、SQL、実行結果、自然言語サマリー）
 
 ### ガードレール
 
@@ -60,15 +60,30 @@ adk-tutorial/
 │   │   ├── tools/
 │   │   │   └── say_hello.py
 │   │   └── __init__.py
-│   └── farewell_agent/        # 別れ専門エージェント
+│   ├── farewell_agent/        # 別れ専門エージェント
+│   │   ├── agent.py
+│   │   ├── tools/
+│   │   │   └── say_goodbye.py
+│   │   └── __init__.py
+│   └── bigquery/              # BigQuery NL2SQLエージェント
 │       ├── agent.py
+│       ├── config/
+│       │   ├── bigquery_data_config.py
+│       │   └── nl2sql_model.py
 │       ├── tools/
-│       │   └── say_goodbye.py
+│       │   └── nl2sql.py
+│       ├── data/
+│       │   └── products.csv
+│       ├── .env.example
 │       └── __init__.py
 ├── guardrail/
 │   ├── block_keyword_guardrail.py
 │   └── block_paris_tool_guardrail.py
+├── docs/                      # ドキュメント
+│   ├── trouble_shooting_adk_web_module_not_found_error.md
+│   └── trouble_shooting_eval_not_found.md
 ├── main.py                    # メインエントリーポイント
+├── format_eval_json.py        # 評価結果フォーマットツール
 ├── pyproject.toml
 └── README.md
 ```
@@ -110,4 +125,17 @@ uv run main.py
 
 ```bash
 uv run adk web agents
+```
+
+### 評価結果のフォーマット
+
+評価結果のJSONファイルを読みやすい形式に整形します：
+
+```bash
+uv run format_eval_json.py <agent_name>
+```
+
+例：
+```bash
+uv run format_eval_json.py bigquery
 ```

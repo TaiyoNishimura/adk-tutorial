@@ -1,147 +1,161 @@
-import asyncio
+import os
+import json
+from typing import AsyncGenerator
 import warnings
-import logging
 
+from pathlib import Path
 from dotenv import load_dotenv
 
-from google.adk.sessions import InMemorySessionService
+from google.genai.types import (
+    Part,
+    Content,
+)
+
 from google.adk.runners import Runner
-from google.genai import types
+from google.adk.sessions.database_session_service import DatabaseSessionService
+from google.adk.sessions.in_memory_session_service import InMemorySessionService
+from google.adk.events import Event
+from google.adk.agents.run_config import RunConfig, StreamingMode
 
-from agents.my_agent.agent import root_agent
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 
-load_dotenv("agents/my_agent/.env")
+# Load environment variables before importing agents
+load_dotenv("agents/bigquery/.env")
+load_dotenv(".env")
 
-warnings.filterwarnings("ignore")
-logging.basicConfig(level=logging.ERROR)
+from agents.bigquery.agent import root_agent
 
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
-async def call_agent_async(query: str, runner, user_id, session_id):
-    """Sends a query to the agent and prints the final response."""
-    print(f"\n>>> User Query: {query}")
+#
+# ADK Streaming
+#
 
-    content = types.Content(role="user", parts=[types.Part(text=query)])
+APP_NAME = "ADK Streaming example"
 
-    final_response_text = "Agent did not produce a final response."
+# TODO: docker composeでPostgreSQLを立ち上げてそれを指定する
+# database_url = os.getenv("DATABASE_URL")
+# if not database_url:
+#     raise ValueError("DATABASE_URL environment variable is not set")
 
-    async for event in runner.run_async(
-        user_id=user_id, session_id=session_id, new_message=content
-    ):
-        print(
-            f"  [Event] Author: {event.author}, Type: {type(event).__name__}, Final: {event.is_final_response()}, Content: {event.content}"
-        )
-        if event.is_final_response():
-            if event.content and event.content.parts:
-                final_response_text = event.content.parts[0].text
-            elif event.actions and event.actions.escalate:
-                final_response_text = (
-                    f"Agent escalated: {event.error_message or 'No specific message.'}"
-                )
-            break
+# session_service = DatabaseSessionService(db_url=database_url)
 
-    print(f"<<< Agent Response: {final_response_text}")
+session_service = InMemorySessionService()
 
 
-async def run_stateful_conversation(
-    runner: Runner,
-    user_id: str,
-    session_id: str,
-    session_service: InMemorySessionService,
-    app_name: str,
-):
-    print("\n--- Testing State: Temp Unit Conversion & output_key ---")
-
-    print("--- Turn 1: Requesting weather in London (expect Celsius) ---")
-    await call_agent_async(
-        query="What's the weather in London?",
-        runner=runner,
-        user_id=user_id,
-        session_id=session_id,
-    )
-
-    print("\n--- Manually Updating State: Setting unit to Fahrenheit ---")
-    try:
-        # Access the internal storage directly - THIS IS SPECIFIC TO InMemorySessionService for testing
-        # NOTE: In production with persistent services (Database, VertexAI), you would
-        # typically update state via agent actions or specific service APIs if available,
-        # not by direct manipulation of internal storage.
-        stored_session = session_service.sessions[app_name][user_id][session_id]
-        stored_session.state["user_preference_temperature_unit"] = "Fahrenheit"
-        print(
-            f"--- Stored session state updated. Current 'user_preference_temperature_unit': {stored_session.state.get('user_preference_temperature_unit', 'Not Set')} ---"
-        )
-    except KeyError:
-        print(
-            f"--- Error: Could not retrieve session '{session_id}' from internal storage for user '{user_id}' in app '{app_name}' to update state. Check IDs and if session was created. ---"
-        )
-    except Exception as e:
-        print(f"--- Error updating internal session state: {e} ---")
-
-    print("\n--- Turn 2: Requesting weather in New York (expect Fahrenheit) ---")
-    await call_agent_async(
-        query="Tell me the weather in New York.",
-        runner=runner,
-        user_id=user_id,
-        session_id=session_id,
-    )
-
-    # 4. Test basic delegation (should still work)
-    # This will update 'last_weather_report' again, overwriting the NY weather report
-    print("\n--- Turn 3: Sending a greeting ---")
-    await call_agent_async(
-        query="Hi!",
-        runner=runner,
-        user_id=user_id,
-        session_id=session_id,
-    )
+runner = Runner(
+    app_name=APP_NAME,
+    agent=root_agent,
+    session_service=session_service,
+)
 
 
-async def main():
-    session_service = InMemorySessionService()
-
-    APP_NAME = "weather_tutorial_app"
-    USER_ID = "user_1"
-    SESSION_ID = "session_001"
-
-    initial_state = {"user_preference_temperature_unit": "Celsius"}
-
-    session = await session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID, state=initial_state
-    )
-
-    print(session.state)
-
-    runner = Runner(
-        agent=root_agent,
+async def get_or_create_session(user_id: str, session_id: str) -> str:
+    session = await runner.session_service.get_session(
         app_name=APP_NAME,
-        session_service=session_service,
+        user_id=user_id,
+        session_id=session_id,
     )
 
-    await run_stateful_conversation(
-        runner=runner,
-        user_id=USER_ID,
-        session_id=SESSION_ID,
-        session_service=session_service,
+    if session:
+        return session.id
+
+    session = await runner.session_service.create_session(
         app_name=APP_NAME,
+        user_id=user_id,
+        session_id=session_id,
     )
 
-    print("\n--- Inspecting Final Session State ---")
-    final_session = await session_service.get_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
+    return session.id
+
+
+async def agent_to_client_sse(events: AsyncGenerator[Event, None]):
+    async for event in events:
+        part: Part = event.content and event.content.parts and event.content.parts[0]
+        if not part:
+            continue
+
+        if part.text and event.partial:
+            message = {"mime_type": "text/plain", "data": part.text}
+            yield f"data: {json.dumps(message)}\n\n"
+            print(f"[AGENT TO CLIENT]: text/plain: {event}")
+
+    # run_asyncの場合はturn_complete: Trueが返却されないので後付け
+    final_message = {
+        "turn_complete": True,
+        "interrupted": False,
+    }
+    yield f"data: {json.dumps(final_message)}\n\n"
+    print(f"[AGENT TO CLIENT]: {final_message}")
+
+
+#
+# FastAPI web app
+#
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+TEST_PAGE_DIR = Path("test_page")
+app.mount("/test_page", StaticFiles(directory=TEST_PAGE_DIR), name="test_page")
+
+
+@app.get("/")
+async def root():
+    return FileResponse(os.path.join(TEST_PAGE_DIR, "index.html"))
+
+
+@app.post("/send/{user_id}/{session_id}")
+async def send_message_endpoint(user_id: str, session_id: str, request: Request):
+    session_id = await get_or_create_session(user_id, session_id)
+
+    message = await request.json()
+    mime_type = message["mime_type"]
+    data = message["data"]
+
+    if mime_type != "text/plain":
+        return {"error": f"Mime type not supported: {mime_type}"}
+
+    user_content = Content(role="user", parts=[Part.from_text(text=data)])
+    print(f"[CLIENT TO AGENT]: {data}")
+
+    run_config = RunConfig(
+        response_modalities=["TEXT"],
+        streaming_mode=StreamingMode.SSE,
     )
-    if final_session:
-        print(
-            f"Final Preference: {final_session.state.get('user_preference_temperature_unit', 'Not Set')}"
-        )
-        print(
-            f"Final Last Weather Report (from output_key): {final_session.state.get('last_weather_report', 'Not Set')}"
-        )
-        print(
-            f"Final Last City Checked (by tool): {final_session.state.get('last_city_checked_stateful', 'Not Set')}"
-        )
-    else:
-        print("\n❌ Error: Could not retrieve final session state.")
 
+    async def event_generator():
+        try:
+            agent_events = runner.run_async(
+                user_id=user_id,
+                session_id=session_id,
+                new_message=user_content,
+                run_config=run_config,
+            )
+            async for data in agent_to_client_sse(agent_events):
+                yield data
+        except Exception as e:
+            print(f"Error in agent stream: {e}")
+            error_message = {"error": str(e), "turn_complete": True}
+            yield f"data: {json.dumps(error_message)}\n\n"
 
-if __name__ == "__main__":
-    asyncio.run(main())
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Cache-Control",
+        },
+    )

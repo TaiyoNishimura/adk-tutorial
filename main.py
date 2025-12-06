@@ -13,7 +13,6 @@ from google.genai.types import (
 
 from google.adk.runners import Runner
 from google.adk.sessions.database_session_service import DatabaseSessionService
-from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.adk.events import Event
 from google.adk.agents.run_config import RunConfig, StreamingMode
 
@@ -36,14 +35,11 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 APP_NAME = "ADK Streaming example"
 
-# TODO: docker composeでPostgreSQLを立ち上げてそれを指定する
-# database_url = os.getenv("DATABASE_URL")
-# if not database_url:
-#     raise ValueError("DATABASE_URL environment variable is not set")
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is not set")
 
-# session_service = DatabaseSessionService(db_url=database_url)
-
-session_service = InMemorySessionService()
+session_service = DatabaseSessionService(db_url=database_url)
 
 
 runner = Runner(

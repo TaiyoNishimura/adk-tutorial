@@ -113,6 +113,38 @@ cd adk-tutorial
 uv sync
 ```
 
+### Docker Composeでデータベースを起動
+
+Dev Containerを使用している場合、PostgreSQLとpgAdminは自動的に起動しています。
+
+手動で起動する場合：
+```bash
+cd .devcontainer
+docker compose up -d
+```
+
+起動したサービス：
+- **PostgreSQL**: localhost:5432
+  - ユーザー名: `user`
+  - パスワード: `password`
+  - データベース名: `db`
+- **pgAdmin**: http://localhost:8080
+  - メールアドレス: `admin@admin.com`
+  - パスワード: `admin`
+
+### pgAdminでデータベースを確認
+
+1. ブラウザで http://localhost:8080 を開く
+2. メールアドレス（`admin@admin.com`）とパスワード（`admin`）でログイン
+3. 左メニューの「Add New Server」をクリック
+4. 接続情報を入力：
+   - **General > Name**: 任意の名前（例：`ADK Database`）
+   - **Connection > Host**: `localhost`
+   - **Connection > Port**: `5432`
+   - **Connection > Username**: `user`
+   - **Connection > Password**: `password`
+5. 「Save」をクリックして接続
+
 ## 使用方法
 
 ### アプリケーションの実行

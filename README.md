@@ -159,6 +159,18 @@ uv run main.py
 uv run adk web agents
 ```
 
+### adk web（デバッグモード）
+
+```bash
+uv run adk web agents -v
+```
+
+デバッグログをファイルに出力
+
+```bash
+uv run adk web agents -v 2>&1 | tee app.log
+```
+
 ### 評価結果のフォーマット
 
 評価結果のJSONファイルを読みやすい形式に整形します：

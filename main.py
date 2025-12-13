@@ -70,14 +70,20 @@ async def get_or_create_session(user_id: str, session_id: str) -> str:
 
 async def agent_to_client_sse(events: AsyncGenerator[Event, None]):
     async for event in events:
-        part: Part = event.content and event.content.parts and event.content.parts[0]
-        if not part:
+        if not event.content or not event.content.parts:
             continue
 
-        if part.text and event.partial:
-            message = {"mime_type": "text/plain", "data": part.text}
-            yield f"data: {json.dumps(message)}\n\n"
-            print(f"[AGENT TO CLIENT]: text/plain: {event}")
+        for part in event.content.parts:
+            if part.text and event.partial:
+                message = {"mime_type": "text/plain", "data": part.text}
+                yield f"data: {json.dumps(message)}\n\n"
+                print(f"[AGENT TO CLIENT]: text/plain: {event}")
+
+            if part.function_call:
+                function_name = part.function_call.name
+                message = {"mime_type": "text/plain", "data": f"{function_name} called\n\n"}
+                yield f"data: {json.dumps(message)}\n\n"
+                print(f"[AGENT TO CLIENT]: function_call: {event}")
 
     # run_asyncの場合はturn_complete: Trueが返却されないので後付け
     final_message = {

@@ -1,6 +1,5 @@
 from google.adk.agents.llm_agent import Agent
-from google.adk.planners import BuiltInPlanner
-from google.genai import types
+from google.adk.planners import PlanReActPlanner
 
 from guardrail import block_paris_tool_guardrail
 from .tools import get_current_time, get_weather_stateful
@@ -10,7 +9,7 @@ from agents.farewell_agent.agent import root_agent as farewell_agent
 
 root_agent = Agent(
     name="weather_agent_v1",
-    model="gemini-2.5-flash",
+    model="gemini-2.0-flash",
     description="The main coordinator agent. Handles weather requests and delegates greetings/farewells to specialists.",
     instruction="You are the main Weather Agent coordinating a team. Your primary responsibility is to provide weather information. "
     "Use the 'get_weather' tool ONLY for specific weather requests (e.g., 'weather in London'). "
@@ -24,10 +23,5 @@ root_agent = Agent(
     before_tool_callback=block_paris_tool_guardrail,
     sub_agents=[greeting_agent, farewell_agent],
     output_key="last_weather_report",
-    planner=BuiltInPlanner(
-        thinking_config=types.ThinkingConfig(
-            include_thoughts=True,
-            thinking_budget=1024,
-        )
-    ),
+    planner=PlanReActPlanner(),
 )

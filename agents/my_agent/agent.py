@@ -1,5 +1,4 @@
 from google.adk.agents.llm_agent import Agent
-from google.adk.planners import PlanReActPlanner
 
 from guardrail import block_paris_tool_guardrail
 from .tools import get_current_time, get_weather_stateful
@@ -23,5 +22,4 @@ root_agent = Agent(
     before_tool_callback=block_paris_tool_guardrail,
     sub_agents=[greeting_agent, farewell_agent],
     output_key="last_weather_report",
-    planner=PlanReActPlanner(),
 )

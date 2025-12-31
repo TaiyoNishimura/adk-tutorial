@@ -1,0 +1,372 @@
+INFO:__main__:Initial session state: {'topic': 'a brave kitten exploring a haunted house'}
+WARNING:google_adk.google.adk.runners:App name mismatch detected. The runner is configured with app name "story_app", but the root agent was loaded from "/workspaces/adk-tutorial/agents/custom_story_generator", which implies app name "custom_story_generator".
+INFO:__main__:Updated session state topic to: an adventurous squirrel searching for hidden treasure
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Starting story generation workflow.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Running StoryGenerator...
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from StoryGenerator: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "Okay, here's a short story about a brave kitten exploring a haunted house:\n\nJasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, but Jasper was too curious to care. He squeezed through a warped board in the porch and padded inside. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers. A moan echoed from upstairs. Jasper's fur stood on end, but he bravely crept forward, his emerald eyes gleaming in the darkness, ready for adventure, ghosts or no ghosts.\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 133,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 133
+      }
+    ],
+    "prompt_token_count": 56,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 56
+      }
+    ],
+    "total_token_count": 189,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.3079992021833147,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "StoryGenerator",
+  "actions": {
+    "state_delta": {
+      "current_story": "Okay, here's a short story about a brave kitten exploring a haunted house:\n\nJasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, but Jasper was too curious to care. He squeezed through a warped board in the porch and padded inside. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers. A moan echoed from upstairs. Jasper's fur stood on end, but he bravely crept forward, his emerald eyes gleaming in the darkness, ready for adventure, ghosts or no ghosts.\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "9cc2316a-a33f-4a8f-a10d-b78234bad8b4",
+  "timestamp": 1767152864.22143
+}
+INFO:__main__:Potential final response from [StoryGenerator]: Okay, here's a short story about a brave kitten exploring a haunted house:
+
+Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, but Jasper was too curious to care. He squeezed through a warped board in the porch and padded inside. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers. A moan echoed from upstairs. Jasper's fur stood on end, but he bravely crept forward, his emerald eyes gleaming in the darkness, ready for adventure, ghosts or no ghosts.
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Story state after generator: Okay, here's a short story about a brave kitten exploring a haunted house:
+
+Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, but Jasper was too curious to care. He squeezed through a warped board in the porch and padded inside. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers. A moan echoed from upstairs. Jasper's fur stood on end, but he bravely crept forward, his emerald eyes gleaming in the darkness, ready for adventure, ghosts or no ghosts.
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Running CriticReviserLoop...
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from CriticReviserLoop: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "This is a good start, but the story could benefit from a more concrete goal for Jasper beyond general curiosity and bravery, and a stronger sense of rising action.\n\nHere's a story about an adventurous squirrel searching for hidden treasure:\n\nNutsy, a squirrel with a tail like a bottlebrush, chattered excitedly. Old Man Fitzwilliam, the park's oldest oak, had told him tales of Captain Bluebeard's buried acorn stash – a treasure of legendary proportions hidden somewhere beneath the park. Nutsy, never one to back down from a challenge, puffed out his chest and began his quest. First, he consulted Beatrice the Blue Jay, known for her sharp eyes. She directed him towards the sundial, where she'd once seen a suspicious-looking disturbance in the soil. Nutsy dug frantically, his tiny claws flying, but only unearthed a rusty button. Undeterred, he followed a faint, moss-covered trail leading towards the abandoned gazebo, rumored to be Bluebeard's favorite lookout spot.\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 212,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 212
+      }
+    ],
+    "prompt_token_count": 334,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 334
+      }
+    ],
+    "total_token_count": 546,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.4230915645383439,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "Critic",
+  "actions": {
+    "state_delta": {
+      "criticism": "This is a good start, but the story could benefit from a more concrete goal for Jasper beyond general curiosity and bravery, and a stronger sense of rising action.\n\nHere's a story about an adventurous squirrel searching for hidden treasure:\n\nNutsy, a squirrel with a tail like a bottlebrush, chattered excitedly. Old Man Fitzwilliam, the park's oldest oak, had told him tales of Captain Bluebeard's buried acorn stash – a treasure of legendary proportions hidden somewhere beneath the park. Nutsy, never one to back down from a challenge, puffed out his chest and began his quest. First, he consulted Beatrice the Blue Jay, known for her sharp eyes. She directed him towards the sundial, where she'd once seen a suspicious-looking disturbance in the soil. Nutsy dug frantically, his tiny claws flying, but only unearthed a rusty button. Undeterred, he followed a faint, moss-covered trail leading towards the abandoned gazebo, rumored to be Bluebeard's favorite lookout spot.\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "78209209-3273-4c94-b43d-bd90f70ba57d",
+  "timestamp": 1767152867.188943
+}
+INFO:__main__:Potential final response from [Critic]: This is a good start, but the story could benefit from a more concrete goal for Jasper beyond general curiosity and bravery, and a stronger sense of rising action.
+
+Here's a story about an adventurous squirrel searching for hidden treasure:
+
+Nutsy, a squirrel with a tail like a bottlebrush, chattered excitedly. Old Man Fitzwilliam, the park's oldest oak, had told him tales of Captain Bluebeard's buried acorn stash – a treasure of legendary proportions hidden somewhere beneath the park. Nutsy, never one to back down from a challenge, puffed out his chest and began his quest. First, he consulted Beatrice the Blue Jay, known for her sharp eyes. She directed him towards the sundial, where she'd once seen a suspicious-looking disturbance in the soil. Nutsy dug frantically, his tiny claws flying, but only unearthed a rusty button. Undeterred, he followed a faint, moss-covered trail leading towards the abandoned gazebo, rumored to be Bluebeard's favorite lookout spot.
+
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from CriticReviserLoop: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. The higher he climbed, the colder it became, and the louder the moans grew.\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 199,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 199
+      }
+    ],
+    "prompt_token_count": 761,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 761
+      }
+    ],
+    "total_token_count": 960,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.26691271911314385,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "Reviser",
+  "actions": {
+    "state_delta": {
+      "current_story": "Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. The higher he climbed, the colder it became, and the louder the moans grew.\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "baa1745f-f6a9-460f-b164-8a9963269673",
+  "timestamp": 1767152870.664618
+}
+INFO:__main__:Potential final response from [Reviser]: Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. The higher he climbed, the colder it became, and the louder the moans grew.
+
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from CriticReviserLoop: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "The pacing is good, but consider adding a specific obstacle or challenge on the staircase to increase the tension before Jasper reaches the source of the moans.\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 31,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 31
+      }
+    ],
+    "prompt_token_count": 821,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 821
+      }
+    ],
+    "total_token_count": 852,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.2333957302954889,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "Critic",
+  "actions": {
+    "state_delta": {
+      "criticism": "The pacing is good, but consider adding a specific obstacle or challenge on the staircase to increase the tension before Jasper reaches the source of the moans.\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "6cd48189-a580-4597-b9a9-a156300d6a22",
+  "timestamp": 1767152873.429692
+}
+INFO:__main__:Potential final response from [Critic]: The pacing is good, but consider adding a specific obstacle or challenge on the staircase to increase the tension before Jasper reaches the source of the moans.
+
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from CriticReviserLoop: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. Halfway up, a step crumbled beneath his paws, sending a shower of splinters and dust billowing around him. He scrabbled for purchase, claws digging into the worn wood, his heart hammering against his ribs. Finally, he regained his footing and continued his ascent, but the near fall left him shaken. The higher he climbed, the colder it became, and the louder the moans grew.\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 262,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 262
+      }
+    ],
+    "prompt_token_count": 884,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 884
+      }
+    ],
+    "total_token_count": 1146,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.08357722158650406,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "Reviser",
+  "actions": {
+    "state_delta": {
+      "current_story": "Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. Halfway up, a step crumbled beneath his paws, sending a shower of splinters and dust billowing around him. He scrabbled for purchase, claws digging into the worn wood, his heart hammering against his ribs. Finally, he regained his footing and continued his ascent, but the near fall left him shaken. The higher he climbed, the colder it became, and the louder the moans grew.\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "45bc312f-18fa-461a-be25-c6d9d030f541",
+  "timestamp": 1767152875.579931
+}
+INFO:__main__:Potential final response from [Reviser]: Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. Halfway up, a step crumbled beneath his paws, sending a shower of splinters and dust billowing around him. He scrabbled for purchase, claws digging into the worn wood, his heart hammering against his ribs. Finally, he regained his footing and continued his ascent, but the near fall left him shaken. The higher he climbed, the colder it became, and the louder the moans grew.
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Story state after loop: Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. Halfway up, a step crumbled beneath his paws, sending a shower of splinters and dust billowing around him. He scrabbled for purchase, claws digging into the worn wood, his heart hammering against his ribs. Finally, he regained his footing and continued his ascent, but the near fall left him shaken. The higher he climbed, the colder it became, and the louder the moans grew.
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Running PostProcessing...
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from PostProcessing: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "Grammar is good!"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 5,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 5
+      }
+    ],
+    "prompt_token_count": 1211,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1211
+      }
+    ],
+    "total_token_count": 1216,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.0000415741465985775,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "GrammarCheck",
+  "actions": {
+    "state_delta": {
+      "grammar_suggestions": "Grammar is good!"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "71d0cea6-aa99-494e-9001-88a0c4f6d226",
+  "timestamp": 1767152878.324312
+}
+INFO:__main__:Potential final response from [GrammarCheck]: Grammar is good!
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.VERTEX_AI, stream: False
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Event from PostProcessing: {
+  "model_version": "gemini-2.0-flash",
+  "content": {
+    "parts": [
+      {
+        "text": "neutral\n"
+      }
+    ],
+    "role": "model"
+  },
+  "finish_reason": "STOP",
+  "usage_metadata": {
+    "candidates_token_count": 2,
+    "candidates_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2
+      }
+    ],
+    "prompt_token_count": 1232,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1232
+      }
+    ],
+    "total_token_count": 1234,
+    "traffic_type": "ON_DEMAND"
+  },
+  "avg_logprobs": -0.0966704934835434,
+  "invocation_id": "e-8c1977e5-7fc5-4747-89ca-f3d1920678bf",
+  "author": "ToneCheck",
+  "actions": {
+    "state_delta": {
+      "tone_check_result": "neutral\n"
+    },
+    "artifact_delta": {},
+    "requested_auth_configs": {},
+    "requested_tool_confirmations": {}
+  },
+  "id": "10573db5-6e9f-4b04-8397-c3d3158a2e4c",
+  "timestamp": 1767152879.675881
+}
+INFO:__main__:Potential final response from [ToneCheck]: neutral
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Tone check result: neutral
+
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Tone is not negative. Keeping current story.
+INFO:agents.custom_story_generator.story_flow_agent:[StoryFlowAgent] Workflow finished.
+
+--- Agent Interaction Result ---
+Agent Final Response:  neutral
+
+Final Session State:
+{
+  "topic": "a brave kitten exploring a haunted house",
+  "current_story": "Jasper, a kitten with fur the color of midnight, twitched his whiskers. The old Victorian house loomed, a silhouette against the stormy sky. Locals whispered it was haunted, claiming the ghost of old Mr. Whiskers still roamed its halls, guarding his prized, silver catnip mouse. Jasper didn't believe in ghosts, but he *did* believe in catnip. He squeezed through a warped board in the porch and padded inside, determined to find the legendary toy. Dust motes danced in the slivers of moonlight. Cobwebs brushed his face like ghostly fingers as he crept into the parlor. A moan echoed from upstairs, followed by a clatter. Jasper's fur stood on end, but the thought of that shimmering, silver mouse spurred him onward. He leaped onto a dusty armchair and then to the staircase, his emerald eyes gleaming with purpose in the darkness. Halfway up, a step crumbled beneath his paws, sending a shower of splinters and dust billowing around him. He scrabbled for purchase, claws digging into the worn wood, his heart hammering against his ribs. Finally, he regained his footing and continued his ascent, but the near fall left him shaken. The higher he climbed, the colder it became, and the louder the moans grew.\n",
+  "criticism": "The pacing is good, but consider adding a specific obstacle or challenge on the staircase to increase the tension before Jasper reaches the source of the moans.\n",
+  "grammar_suggestions": "Grammar is good!",
+  "tone_check_result": "neutral\n"
+}
+-------------------------------
+

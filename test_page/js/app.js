@@ -51,7 +51,7 @@ async function sendMessage(message) {
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
-    let buffer = '';
+    let buffer = '';  // SSEのチャンクを受け取る時、不完全な行を一時的に保持するバッファ
 
     while (true) {
       const { done, value } = await reader.read();
@@ -61,9 +61,8 @@ async function sendMessage(message) {
       }
 
       buffer += decoder.decode(value, { stream: true });
-
       const lines = buffer.split('\n');
-      buffer = lines.pop(); // Keep incomplete line in buffer
+      buffer = lines.pop(); 
 
       for (const line of lines) {
         if (line.startsWith('data: ')) {

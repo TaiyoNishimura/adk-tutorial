@@ -1,10 +1,13 @@
 from google.adk.agents.llm_agent import Agent
+from google.adk.tools import agent_tool
 
 from guardrail import block_paris_tool_guardrail
 from .tools import get_current_time, get_weather_stateful
 
 from agents.greeting_agent.agent import root_agent as greeting_agent
 from agents.farewell_agent.agent import root_agent as farewell_agent
+
+farewell_agent_tool = agent_tool.AgentTool(agent=farewell_agent)
 
 root_agent = Agent(
     name="weather_agent_v1",
@@ -18,8 +21,8 @@ root_agent = Agent(
     "Analyze the user's query. If it's a greeting, delegate to 'greeting_agent'. If it's a farewell, delegate to 'farewell_agent'. "
     "If it's a weather request, handle it yourself using 'get_weather'. "
     "For anything else, respond appropriately or state you cannot handle it.",
-    tools=[get_current_time, get_weather_stateful],
+    tools=[get_current_time, get_weather_stateful, farewell_agent_tool],
     before_tool_callback=block_paris_tool_guardrail,
-    sub_agents=[greeting_agent, farewell_agent],
+    sub_agents=[greeting_agent],
     output_key="last_weather_report",
 )
